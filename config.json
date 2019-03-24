@@ -1,0 +1,129 @@
+{
+  "_comment": "Top of the file has critical things that I have to change before releasing - lower part has safe things",
+
+  "token": "discord-token-here",
+
+  "banchoProfileApi": "https://osu.ppy.sh/api/get_user?k=osu-api-key-here&u=",
+  "banchoTopApi": "https://osu.ppy.sh/api/get_user_best?k=osu-api-key-here&u=",
+  "banchoRecentApi": "https://osu.ppy.sh/api/get_user_recent?k=osu-api-key-here&limit=1&u=",
+  "banchoMapApi": "https://osu.ppy.sh/api/get_beatmaps?k=osu-api-key-here&b=",
+  "banchoSetApi": "https://osu.ppy.sh/api/get_beatmaps?k=osu-api-key-here&s=",
+  "banchoUserMapApi": "https://osu.ppy.sh/api/get_beatmaps?k=osu-api-key-here&u=",
+  "banchoAviUrl": "https://a.ppy.sh/",
+  "banchoPUrl": "https://osu.ppy.sh/users/",
+
+
+
+  "prefix": "$",
+  "version": "3.0.0",
+
+  "ownerID": "292700741435654155",
+
+  "botInvite": "https://discordapp.com/api/oauth2/authorize?client_id=533659989202436096&scope=bot",
+  "serverInvite": "https://discord.gg/pgvyKek",
+
+
+
+  "bloodcatApi": "https://bloodcat.com/osu/?mod=json&q=",
+  
+  "gatariOldProfileApi": "https://osu.gatari.pw/api/v1/users/stats?u=",
+  "gatariProfileApi": "https://api.gatari.pw/user/stats?id=",
+  "gatariTopApi": "https://api.gatari.pw/user/scores/best?id=",
+  "gatariRecentApi": "https://api.gatari.pw/user/scores/recent?id=",
+  "gatariAviUrl": "https://a.gatari.pw/",
+  "gatariPUrl": "http://osu.gatari.pw/u/",
+
+  "akatsukiProfileApi": "https://akatsuki.pw/api/get_user?u=",
+  "akatsukiTopApi": "https://akatsuki.pw/api/get_user_best?u=",
+  "akatsukiRecentApi": "https://akatsuki.pw/api/get_user_recent?u=",
+  "akatsukiAviUrl": "https://a.akatsuki.pw/",
+  "akatsukiPUrl": "https://akatsuki.pw/u/",
+
+  "rippleProfileApi": "https://ripple.moe/api/get_user?u=",
+  "rippleTopApi": "https://ripple.moe/api/get_user_best?u=",
+  "rippleRecentApi": "https://ripple.moe/api/get_user_recent?u=",
+  "rippleAviUrl": "https://a.ripple.moe/",
+  "ripplePUrl": "https://ripple.moe/u/",
+
+  "kurikkuProfileApi": "https://kurikku.pw/api/get_user?u=",
+  "kurikkuTopApi": "https://kurikku.pw/api/get_user_best?u=",
+  "kurikkuRecentApi": "https://kurikku.pw/api/get_user_recent?u=",
+  "kurikkuAviUrl": "https://a.kurikku.pw/",
+  "kurikkuPUrl": "https://kurikku.pw/u/",
+
+  "enshiProfileApi": "https://enshi.pl/api/get_user?u=",
+  "enshiTopApi": "https://enshi.pl/api/get_user_best?u=",
+  "enshiRecentApi": "https://enshi.pl/api/get_user_recent?u=",
+  "enshiAviUrl": "https://a.enshi.pl/",
+  "enshiPUrl": "https://enshi.pl/u/",
+
+  "enjuuProfileApi": "https://enjuu.click/api/get_user?u=",
+  "enjuuTopApi": "https://enjuu.click/api/get_user_best?u=",
+  "enjuuRecentApi": "https://enjuu.click/api/get_user_recent?u=",
+  "enjuuAviUrl": "https://a.enjuu.click/",
+  "enjuuPUrl": "https://enjuu.click/u/",
+
+  "yozoraProfileApi": "http://yozora.pw/api/get_user?u=",
+  "yozoraTopApi": "http://yozora.pw/api/get_user_best?u=",
+  "yozoraRecentApi": "http://yozora.pw/api/get_user_recent?u=",
+  "yozoraAviUrl": "https://a.yozora.pw/",
+  "yozoraPUrl": "https://yozora.pw/u/",
+
+  "kawataProfileApi": "https://kawata.pw/api/get_user?u=",
+  "kawataTopApi": "https://kawata.pw/api/get_user_best?u=",
+  "kawataRecentApi": "https://kawata.pw/api/get_user_recent?u=",
+  "kawataAviUrl": "https://a.kawata.pw",
+  "kawataPUrl": "https://kawata.pw/u/",
+
+
+  "yandere": "https://yande.re/post.json?tags=order%3Arandom+",
+  "danbooru": "https://danbooru.donmai.us/posts.json?tags=order%3Arandom+",
+  "gelbooru": "https://gelbooru-xsd8bjco8ukx.runkit.sh/posts?tags=",
+
+
+  "noMod": "",
+
+  "osuF": "<:osuF:556219352228036608>",
+  "osuC": "<:osuC:556219351997480973>",
+  "osuB": "<:osuB:556219352295276547>",
+  "osuA": "<:osuA:556218790136905746>",
+  "osuS": "<:osuS:556219134174560306>",
+  "osuX": "<:osuX:556218909825695746>",
+  "osuSH": "<:osuSH:556218696406794260>",
+  "osuXH": "<:osuXH:556218696432091136>",
+
+
+  "osuCmd": "Get a list of osu related commands",
+  "profileCmd": "Get profile of entered user",
+  "topCmd": "Get top plays of entered user",
+  "lastCmd": "Get last plays of entered user",
+  "akatsukiCmd": "Get akatsuki related commands",
+  "rippleCmd": "Get akatsuki related commands",
+  "gatariCmd": "Get akatsuki related commands",
+  "kurikkuCmd": "Get akatsuki related commands",
+  "enshiCmd": "Get akatsuki related commands",
+  "enjuuCmd": "Get akatsuki related commands",
+  "yozoraCmd": "Get akatsuki related commands",
+  "kawataCmd": "Get akatsuki related commands",
+
+  "gelbooruCmd": "Get random image from gelbooru.com with entered tag",
+  "yandereCmd": "Get random image from yande.re with entered tag",
+  "danbooruCmd": "Get random image from danbooru.donmai.us with entered tag",
+
+
+  "helpCmd": "Get a list of all commands",
+  "pingCmd": "Get the bot's ping",
+  "creditsCmd": "List of helpful people in the making of this bot",
+  "configCmd": "Change the server's configurations",
+
+
+  "uptimeCmd": "Get the uptime of the bot",
+  "inviteMeCmd": "Invite you to the guild entered",
+  "leaveMeCmd": "Make the bot leave the entered guild",
+  "leaveCmd": "Leave the server where the command is executed",
+  "nsfwPlusCmd": "Toggles nsfw+ mode",
+  "setAvatarCmd": "Change the bot's avatar",
+  "setNameCmd": "Change the bot's name",
+  "stopCmd": "Stop the bot",
+  "evalCmd": "Run code"
+}
