@@ -15,11 +15,24 @@ module.exports = (client, message) => {
     //just takes the arguments
     const args = message.content.slice(p.length).trim().split(/ +/g);
     //just takes the command
-    const command = args.shift().toLowerCase();
+    let command = args.shift().toLowerCase();
+
+    //aliases
+    if(command === "l" || command === "recent" || command === "r") { command = "last"; }
+    if(command === "t") { command = "top"; }
+    if(command === "p") { command = "profile"; }
+    if(command === "a") { command = "akatsuki"; }
+    if(command === "ri") { command = "ripple"; }
+    if(command === "g") { command = "gatari"; }
+    if(command === "ku") { command = "kurikku"; }
+    if(command === "es") { command = "enshi"; }
+    if(command === "ej") { command = "enjuu"; }
+    if(command === "y") { command = "yozora"; }
+    if(command === "ka") { command = "kawata"; }
 
     //get the command
     const cmd = client.commands.get(command);
-    //if no command doesn't exist return
+    //if command doesn't exist return
     if (!cmd) return;
 
     //run the command

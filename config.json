@@ -1,21 +1,21 @@
 {
   "_comment": "Top of the file has critical things that I have to change before releasing - lower part has safe things",
 
-  "token": "discord-token-here",
+  "token": "",
 
-  "banchoProfileApi": "https://osu.ppy.sh/api/get_user?k=osu-api-key-here&u=",
-  "banchoTopApi": "https://osu.ppy.sh/api/get_user_best?k=osu-api-key-here&u=",
-  "banchoRecentApi": "https://osu.ppy.sh/api/get_user_recent?k=osu-api-key-here&limit=1&u=",
-  "banchoMapApi": "https://osu.ppy.sh/api/get_beatmaps?k=osu-api-key-here&b=",
-  "banchoSetApi": "https://osu.ppy.sh/api/get_beatmaps?k=osu-api-key-here&s=",
-  "banchoUserMapApi": "https://osu.ppy.sh/api/get_beatmaps?k=osu-api-key-here&u=",
+  "banchoProfileApi": "https://osu.ppy.sh/api/get_user?k=&u=",
+  "banchoTopApi": "https://osu.ppy.sh/api/get_user_best?k=&u=",
+  "banchoRecentApi": "https://osu.ppy.sh/api/get_user_recent?k=&limit=1&u=",
+  "banchoMapApi": "https://osu.ppy.sh/api/get_beatmaps?k=&b=",
+  "banchoSetApi": "https://osu.ppy.sh/api/get_beatmaps?k=&s=",
+  "banchoUserMapApi": "https://osu.ppy.sh/api/get_beatmaps?k=&u=",
   "banchoAviUrl": "https://a.ppy.sh/",
   "banchoPUrl": "https://osu.ppy.sh/users/",
 
 
 
   "prefix": "$",
-  "version": "3.0.0",
+  "version": "3.0.1",
 
   "ownerID": "292700741435654155",
 
@@ -118,6 +118,7 @@
 
 
   "uptimeCmd": "Get the uptime of the bot",
+  "statusCmd": "Temporarily update the activity of the bot",
   "inviteMeCmd": "Invite you to the guild entered",
   "leaveMeCmd": "Make the bot leave the entered guild",
   "leaveCmd": "Leave the server where the command is executed",

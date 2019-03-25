@@ -1,91 +1,12 @@
 exports.run = (client, message, args, p) => {
-    //variables
     let cfg = client.config;
-    let pApi = cfg.akatsukiProfileApi;
-    let tApi = cfg.akatsukiTopApi;
-    let rApi = cfg.akatsukiRecentApi;
-    let pUrl = cfg.akatsukiPUrl;
-    let aviUrl = cfg.akatsukiAviUrl;
-    let nameIndex = 1;
-    let argIndex = 0;
-    let server = "akatsuki";
-    //if there are firstargs (i named it secondargs out of laziness gotta fix someday)
-    if(args[argIndex]) {
-        let secondArgs = args[argIndex];
-        //if the first args are profile or p
-        if(secondArgs === "profile" || secondArgs === "p") {
-            //get the profile from the profile function (look in osu for documentation (if i already did documentation for that))
-            profile(pApi, aviUrl, pUrl, args, message, client, nameIndex, server);
-            //afterwards return so that the akatsuki help command wont show
-            return;
-        } else
-        //if the first args are top or t
-        if(secondArgs === "top" || secondArgs === "t") {
-            //get the top from the top function (same thing like with profile for doc look osu.js)
-            top(pApi, tApi, pUrl, client, message, args, nameIndex, server);
-            //return
-            return;
-        } else
-        //if its last, l, recent or r
-        if(secondArgs === "last" || secondArgs === "l" || secondArgs === "r" || secondArgs === "recent") {
-            //get last fucntin
-            last(client, message, args, nameIndex, rApi, pApi, server, aviUrl);
-            //return
-            return;
-        }
-    }
-    //send help message
-    sendPrivServerHelp(message, "Akatsuki", p);
-    //i dont know why there is a return here but i put it here for some reason lol
-    return;
-}
+    let pApi = cfg.banchoProfileApi;
+    let tApi = cfg.banchoTopApi;
+    let pUrl = cfg.banchoPUrl;
+    let nameIndex = 0;
+    let server = "bancho";
 
-//for documentation look in osu.js
-//if i did it already
-
-function profile(pAPI, aviUrl, pUrl, args, message, client, nameIndex, server) {
-    let username;
-    if(args[nameIndex]) {
-        username = args.slice(nameIndex).join(" ");
-    } else
-    if(!args[nameIndex]) {
-        username = client.osuNames.get(message.author.id, server);
-    }
-    if(username === '-') return message.channel.send("Please enter a user");
-    if(username.includes("@everyone")) return message.channel.send("Please don't try to abuse the profile command by pinging everyone");
-    if(username.includes("@here")) return message.channel.send("Please don't try to abuse the profile command by pinging everyone");
-
-    let profile = pAPI + username.split(' ').join('%20');
-
-    if(!username) return message.channel.send("Please enter a user!");
-    client.snekfetch.get(profile).then((r) => {
-        let body = r.body;
-        if(!body[0]) return message.channel.send("I couldn't find " + username);
-        let bodyname = body[0].username;
-        let bodygrank = body[0].pp_rank;
-        let bodycrank = body[0].pp_country_rank;
-        let bodycountry = body[0].country;
-        let bodyid = body[0].user_id;
-        let bodyppraw = body[0].pp_raw;
-        let bodypp = parseInt(bodyppraw);
-        let bodyacc = body[0].accuracy;
-        let bodyplaycount = body[0].playcount;
-        let bodylevel = parseInt(body[0].level);
-        message.channel.send({"embed": {
-            "title": `Name: ${bodyname}`,
-            "description": `**PP:** ${bodypp}pp
-**Accuracy:** ${bodyacc.substring(0, 5)}%
-**Global Rank:** #${bodygrank}
-**Country Rank:** #${bodycrank} (${bodycountry})
-**Level**: ${bodylevel} | **Playcount**: ${bodyplaycount}`,
-            "url": `${pUrl}${bodyid}`,
-            "color": 16399236,
-            "thumbnail": {
-              "url": `${aviUrl}${bodyid}`
-            }
-        }});
-    });
-    return;
+    top(pApi, tApi, pUrl, client, message, args, nameIndex, server);
 }
 
 function top(pAPI, tAPI, pUrl, client, message, args, nameIndex, server) {
@@ -192,69 +113,6 @@ function top(pAPI, tAPI, pUrl, client, message, args, nameIndex, server) {
         });
     });
 
-    return;
-}
-
-function last(client, message, args, nameIndex, rAPI, pAPI, server, aviUrl) {
-    let username;
-    if(args[nameIndex]) {
-        username = args.slice(nameIndex).join(" ");
-    } else
-    if(!args[nameIndex]) {
-        username = client.osuNames.get(message.author.id, server);
-    }
-    if(username === '-') return message.channel.send("Please enter a user");
-    if(username.includes("@everyone")) return message.channel.send("Please don't try to abuse the recent command by pinging everyone");
-    if(username.includes("@here")) return message.channel.send("Please don't try to abuse the recent command by pinging everyone");
-    if(username.includes("&m=")) return message.channel.send("I'm sorry but the bot doesn't support any other modes than standard");
-
-    let recent = rAPI + username.split(' ').join('%20');
-    let profile = pAPI + username.split(' ').join('%20');
-    let mapAPI = client.config.banchoMapApi;
-
-    if(!username) return message.channel.send("Please enter a user!");
-    
-    client.snekfetch.get(profile).then((r) => {
-        let bodyp = r.body;
-        client.snekfetch.get(recent).then((a) => {
-            let bodyr = a.body;
-            if(!bodyp[0]) return message.channel.send("I couldn't find " + username);
-            let pname = bodyp[0].username;
-            if(!bodyr[0]) return message.channel.send(pname + " doesn't have any recent plays");
-            let mapn = mapAPI + bodyr[0].beatmap_id;
-            client.snekfetch.get(mapn).then((m) => {
-                let map = m.body;
-
-                let rank = rankToEmoji(bodyr, 0, client);
-
-                let accn = accCalculation(bodyr, 0);
-                let acc = accCalculation(bodyr, 0).toString().substring(0, 5);
-                let mods = modCalculation(client, bodyr, 0);
-                let rawMods = bodyr[0].enabled_mods;
-
-                client.request('http://osu.ppy.sh/osu/' + bodyr[0].beatmap_id, (error, response, body) => {
-                    let ifFCPP = ifFCPPCalculation(rawMods, client, bodyr, 0, map, body, accn);
-                    let stars = srCalculation(rawMods, body, client);
-                    let pp = ppCalculation(rawMods, accn, body, bodyr, 0, client);
-                    let mt = `${map[0].artist} - ${map[0].title} [${map[0].version}] (${stars}*)`;
-                    let md = `PP: ${pp}pp ${ifFCPP}\nAccuracy: ${acc}% (${bodyr[0].count300}/${bodyr[0].count100}/${bodyr[0].count50}/${bodyr[0].countmiss})\nCombo: ${bodyr[0].maxcombo}x / ${map[0].max_combo}x\n${mods}Grade:  ${rank}\nMapper: ${map[0].creator} | [Download](https://osu.ppy.sh/beatmapsets/${map[0].beatmapset_id}/download)`;
-                    message.channel.send({ "embed": {
-                        "color": 16399236,
-                        "footer": {
-                            "icon_url": `${aviUrl}${bodyp[0].user_id}`,
-                            "text": `Recent play from: ${pname}`
-                        },
-                        "thumbnail": {
-                            "url": "https://b.ppy.sh/thumb/" + map[0].beatmapset_id + ".jpg"
-                        },
-                        "fields": [{
-                            "name": mt,
-                            "value": md
-                    }]}});
-                });
-            });
-        });
-    });
     return;
 }
 
@@ -388,25 +246,6 @@ function replaceIntWithMod(a) {
     }
 }
 
-function ppCalculation(mods, accn, requestBody, body, bodyIndex, client) {
-    let acc_percent = parseFloat(accn);
-    let combo = parseInt(body[bodyIndex].maxcombo);
-    let nmiss = parseInt(body[bodyIndex].countmiss);
-    
-    let parser = new client.ojs.parser().feed(requestBody);
-    let map = parser.map;
-    let rawStars = new client.ojs.diff().calc({map: map, mods: mods});
-  
-    let rawPP = client.ojs.ppv2({
-      stars: rawStars,
-      combo: combo,
-      nmiss: nmiss,
-      acc_percent: acc_percent,
-    });
-    let pp = rawPP.total.toFixed(2);
-    return pp;
-}
-
 function srCalculation(mods, requestBody, client) {
     let parser = new client.ojs.parser().feed(requestBody);
     let map = parser.map;
@@ -435,13 +274,6 @@ function ifFCPPCalculation(mods, client, body, bodyIndex, mapBody, requestBody, 
       ifFCPP = "=> " + fcPP.total.toFixed(2) + "pp";
     }
     return ifFCPP;
-}
-
-function sendPrivServerHelp(message, server, p) {
-    message.channel.send({"embed": {
-        "description": "**" + server + ":** \n\nusage: " + p + "osu " + server +" <command>\n\nprofile <name>: ``sends a " + server + " profile card``\nlast <name>: ``sends recent plays of entered user``\ntop <name> ``sends top plays of entered user``\n\naliases: p, l, t",
-        "color": 16399236
-    }});
 }
 
 var Mods =

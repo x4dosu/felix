@@ -17,7 +17,9 @@ module.exports = (client) => {
     (async function() {
         await client.specialNSFW.defer;
     }());
+
     
+
     //changes the game that is displayed in discord activity
     client.user.setActivity(`your orders | ${client.config.prefix}help`, { type: 'LISTENING' });
     //changes the presence

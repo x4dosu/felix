@@ -45,6 +45,7 @@ config set <property> <value> :: ${client.config.configCmd}\`\`\``);
             }});
             message.channel.send(`\`\`\`asciidoc
 uptime :: ${client.config.uptimeCmd}
+status <type> <activity> :: ${client.config.statusCmd}
 inviteme <guild name> :: ${client.config.inviteMeCmd}
 leaveme <guild name> :: ${client.config.leaveMeCmd}
 leave :: ${client.config.leaveCmd}

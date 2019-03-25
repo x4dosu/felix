@@ -753,34 +753,45 @@ exports.run = (client, message, args, p) => {
 //another notice for myself i hate documenting
 //non documented function & other shit hell below (heart of the code):
 
+//get the profile
 function profile(pAPI, aviUrl, pUrl, args, message, client, nameIndex, server) {
     let username;
+    //if someone enters a name
     if(args[nameIndex]) {
+        //then the name is everything from the nameIndex
         username = args.slice(nameIndex).join(" ");
     } else
+    //if no username entered
     if(!args[nameIndex]) {
+        //then get the default username from the database
         username = client.osuNames.get(message.author.id, server);
     }
+    //if the user hasn't changed their username then return
     if(username === '-') return message.channel.send("Please enter a user");
+    //anti ping stuff
     if(username.includes("@everyone")) return message.channel.send("Please don't try to abuse the profile command by pinging everyone");
     if(username.includes("@here")) return message.channel.send("Please don't try to abuse the profile command by pinging everyone");
 
+    //profile api plus username spaces are switched with %20
     let profile = pAPI + username.split(' ').join('%20');
-
+    /*this line is unneeded cause we already check if it's no username added but just in 
+    case that the database has no name or someone finds an exploit ill keep this*/
     if(!username) return message.channel.send("Please enter a user!");
+    //request the profile api 
     client.snekfetch.get(profile).then((r) => {
         let body = r.body;
+        //if no result return
         if(!body[0]) return message.channel.send("I couldn't find " + username);
         let bodyname = body[0].username;
         let bodygrank = body[0].pp_rank;
         let bodycrank = body[0].pp_country_rank;
         let bodycountry = body[0].country;
         let bodyid = body[0].user_id;
-        let bodyppraw = body[0].pp_raw;
-        let bodypp = parseInt(bodyppraw);
+        let bodypp = parseInt(body[0].pp_raw);
         let bodyacc = body[0].accuracy;
         let bodyplaycount = body[0].playcount;
         let bodylevel = parseInt(body[0].level);
+        //send profile embed in channel
         message.channel.send({"embed": {
             "title": `Name: ${bodyname}`,
             "description": `**PP:** ${bodypp}pp
@@ -798,101 +809,130 @@ function profile(pAPI, aviUrl, pUrl, args, message, client, nameIndex, server) {
     return;
 }
 
+//get the top plays
 function top(pAPI, tAPI, pUrl, client, message, args, nameIndex, server) {
     let username;
+    //if a username was entered
     if(args[nameIndex]) {
+        //username is everything from nameIndex
         username = args.slice(nameIndex).join(" ");
     } else
+    //if no username entered
     if(!args[nameIndex]) {
+        //get the username from the database
         username = client.osuNames.get(message.author.id, server);
     }
+    //if the user left the name on default return
     if(username === '-') return message.channel.send("Please enter a user");
+    //anti ping stuff
     if(username.includes("@everyone")) return message.channel.send("Please don't try to abuse the top command by pinging everyone");
     if(username.includes("@here")) return message.channel.send("Please don't try to abuse the top command by pinging everyone");
+    //if someone tries to request other modes return i havent supported the pp calculation for them yet
     if(username.includes("&m=")) return message.channel.send("I'm sorry but the bot doesn't support any other modes than standard");
-
+    //the apis
     let top = tAPI + username.split(' ').join('%20');
     let profile = pAPI + username.split(' ').join('%20');
     let mapAPI = client.config.banchoMapApi;
-
+    //I explained this in the profile already
     if(!username) return message.channel.send("Please enter a user!");
+    //request the profile
     client.snekfetch.get(profile).then((r) => {
         let bodyp = r.body;
+        //request the top plays
         client.snekfetch.get(top).then((a) => {
             let bodyt = a.body;
+            //if no profile or top plays return
             if(!bodyt[0] || !bodyp[0]) return message.channel.send("I either couldn't find this user or they didn't have any top plays");
             let mapn1 =  mapAPI + bodyt[0].beatmap_id;
+            //request first map
             client.snekfetch.get(mapn1).then((m1) => {
-            let map1 = m1.body;
-            if(!bodyt[1]) return message.channel.send("I either couldn't find this user or they didn't have enough top plays");
-            let mapn2 = mapAPI + bodyt[1].beatmap_id;
-            client.snekfetch.get(mapn2).then((m2) => {
-                let map2 = m2.body;
-                if(!bodyt[2]) return message.channel.send("I either couldn't find this user or they didn't have enough top plays");
-                let mapn3 = mapAPI + bodyt[2].beatmap_id;
-                client.snekfetch.get(mapn3).then((m3) => {
-                    let map3 = m3.body;
-                    let pname = bodyp[0].username;
-                    let purl = pUrl + bodyp[0].user_id;
+                let map1 = m1.body;
+                if(!bodyt[1]) return message.channel.send("I either couldn't find this user or they didn't have enough top plays");
+                let mapn2 = mapAPI + bodyt[1].beatmap_id;
+                //request second map
+                client.snekfetch.get(mapn2).then((m2) => {
+                    let map2 = m2.body;
+                    if(!bodyt[2]) return message.channel.send("I either couldn't find this user or they didn't have enough top plays");
+                    let mapn3 = mapAPI + bodyt[2].beatmap_id;
+                    //request third map
+                    client.snekfetch.get(mapn3).then((m3) => {
+                        let map3 = m3.body;
+                        let pname = bodyp[0].username;
+                        let purl = pUrl + bodyp[0].user_id;
 
-                    let rank1;
-                    let rank2;
-                    let rank3;
+                        let rank1;
+                        let rank2;
+                        let rank3;
+                        
+                        //turn the grades to discord emojis
 
-                    rank1 = rankToEmoji(bodyt, 0, client);
-                    rank2 = rankToEmoji(bodyt, 1, client);
-                    rank3 = rankToEmoji(bodyt, 2, client);
+                        rank1 = rankToEmoji(bodyt, 0, client);
+                        rank2 = rankToEmoji(bodyt, 1, client);
+                        rank3 = rankToEmoji(bodyt, 2, client);
 
-                    let accn1 = accCalculation(bodyt, 0);
-                    let acc1 = accCalculation(bodyt, 0).toString().substring(0, 5);
-                    let mods1 = modCalculation(client, bodyt, 0);
-                    let rawMods1 = bodyt[0].enabled_mods;
+                        //calculate the accuracy & mods
 
-                    let accn2 = accCalculation(bodyt, 1);
-                    let acc2 = accCalculation(bodyt, 1).toString().substring(0, 5);
-                    let mods2 = modCalculation(client, bodyt, 1);
-                    let rawMods2 = bodyt[1].enabled_mods;
+                        let accn1 = accCalculation(bodyt, 0);
+                        let acc1 = accCalculation(bodyt, 0).toString().substring(0, 5);
+                        let mods1 = modCalculation(client, bodyt, 0);
+                        let rawMods1 = bodyt[0].enabled_mods;
 
-                    let accn3 = accCalculation(bodyt, 2);
-                    let acc3 = accCalculation(bodyt, 2).toString().substring(0, 5);
-                    let mods3 = modCalculation(client, bodyt, 2);
-                    let rawMods3 = bodyt[2].enabled_mods;
+                        let accn2 = accCalculation(bodyt, 1);
+                        let acc2 = accCalculation(bodyt, 1).toString().substring(0, 5);
+                        let mods2 = modCalculation(client, bodyt, 1);
+                        let rawMods2 = bodyt[1].enabled_mods;
 
-                    client.request('http://osu.ppy.sh/osu/' + map1[0].beatmap_id, (error, response, body1) => {
-                        let ifFCPP1 = ifFCPPCalculation(rawMods1, client, bodyt, 0, map1, body1, accn1);
-                        let stars1 = srCalculation(rawMods1, body1, client);
-                        client.request('http://osu.ppy.sh/osu/' + map2[0].beatmap_id, (error, response, body2) => {
-                            let ifFCPP2 = ifFCPPCalculation(rawMods2, client, bodyt, 1, map2, body2, accn2);
-                            let stars2 = srCalculation(rawMods2, body2, client);
-                            client.request('http://osu.ppy.sh/osu/' + map3[0].beatmap_id, (error, response, body3) => {
-                                let ifFCPP3 = ifFCPPCalculation(rawMods3, client, bodyt, 2, map3, body3, accn3);
-                                let stars3 = srCalculation(rawMods3, body3, client);
+                        let accn3 = accCalculation(bodyt, 2);
+                        let acc3 = accCalculation(bodyt, 2).toString().substring(0, 5);
+                        let mods3 = modCalculation(client, bodyt, 2);
+                        let rawMods3 = bodyt[2].enabled_mods;
+                        //request the html of the first map
+                        client.request('http://osu.ppy.sh/osu/' + map1[0].beatmap_id, (error, response, body1) => {
+                            //calculate if fc pp and star rating
+                            let ifFCPP1 = ifFCPPCalculation(rawMods1, client, bodyt, 0, map1, body1, accn1);
+                            let stars1 = srCalculation(rawMods1, body1, client);
+                            //request the html of the second map
+                            client.request('http://osu.ppy.sh/osu/' + map2[0].beatmap_id, (error, response, body2) => {
+                                //calculate if fc pp and star rating
+                                let ifFCPP2 = ifFCPPCalculation(rawMods2, client, bodyt, 1, map2, body2, accn2);
+                                let stars2 = srCalculation(rawMods2, body2, client);
+                                //request the html of the last map
+                                client.request('http://osu.ppy.sh/osu/' + map3[0].beatmap_id, (error, response, body3) => {
+                                    //calculate if fc pp and star rating
+                                    let ifFCPP3 = ifFCPPCalculation(rawMods3, client, bodyt, 2, map3, body3, accn3);
+                                    let stars3 = srCalculation(rawMods3, body3, client);
 
-                                let m1t = `${map1[0].artist} - ${map1[0].title} [${map1[0].version}] (${stars1}*)`;
-                                let m2t = `${map2[0].artist} - ${map2[0].title} [${map2[0].version}] (${stars2}*)`;
-                                let m3t = `${map3[0].artist} - ${map3[0].title} [${map3[0].version}] (${stars3}*)`;
-                                let m1d = `PP: ${parseInt(bodyt[0].pp)}pp ${ifFCPP1}\nAccuracy: ${acc1}% (${bodyt[0].count300}/${bodyt[0].count100}/${bodyt[0].count50}/${bodyt[0].countmiss})\nCombo: ${bodyt[0].maxcombo}x / ${map1[0].max_combo}x\n${mods1}Grade:  ${rank1}\nMapper: ${map1[0].creator} | [Download](https://osu.ppy.sh/beatmapsets/${map1[0].beatmapset_id}/download)`
-                                let m2d = `PP: ${parseInt(bodyt[1].pp)}pp ${ifFCPP2}\nAccuracy: ${acc2}% (${bodyt[1].count300}/${bodyt[1].count100}/${bodyt[1].count50}/${bodyt[1].countmiss})\nCombo: ${bodyt[1].maxcombo}x / ${map2[0].max_combo}x\n${mods2}Grade:  ${rank2}\nMapper: ${map2[0].creator} | [Download](https://osu.ppy.sh/beatmapsets/${map2[0].beatmapset_id}/download)`
-                                let m3d = `PP: ${parseInt(bodyt[2].pp)}pp ${ifFCPP3}\nAccuracy: ${acc3}% (${bodyt[2].count300}/${bodyt[2].count100}/${bodyt[2].count50}/${bodyt[2].countmiss})\nCombo: ${bodyt[2].maxcombo}x / ${map3[0].max_combo}x\n${mods3}Grade:  ${rank3}\nMapper: ${map2[0].creator} | [Download](https://osu.ppy.sh/beatmapsets/${map3[0].beatmapset_id}/download)`
+                                    //put everything together for the map title
 
-                                message.channel.send({ "embed": {
-                                "title": `Top plays from: ${pname}`,
-                                "url": purl,
-                                "color": 16399236,
-                                "fields": [
-                                    {
-                                    "name": m1t,
-                                    "value": m1d
-                                    },
-                                    {
-                                    "name": m2t,
-                                    "value": m2d
-                                    },
-                                    {
-                                    "name": m3t,
-                                    "value": m3d
-                                }]}});
+                                    let m1t = `${map1[0].artist} - ${map1[0].title} [${map1[0].version}] (${stars1}*)`;
+                                    let m2t = `${map2[0].artist} - ${map2[0].title} [${map2[0].version}] (${stars2}*)`;
+                                    let m3t = `${map3[0].artist} - ${map3[0].title} [${map3[0].version}] (${stars3}*)`;
 
+                                    //put everything together for the map description
+
+                                    let m1d = `PP: ${parseInt(bodyt[0].pp)}pp ${ifFCPP1}\nAccuracy: ${acc1}% (${bodyt[0].count300}/${bodyt[0].count100}/${bodyt[0].count50}/${bodyt[0].countmiss})\nCombo: ${bodyt[0].maxcombo}x / ${map1[0].max_combo}x\n${mods1}Grade:  ${rank1}\nMapper: ${map1[0].creator} | [Download](https://osu.ppy.sh/beatmapsets/${map1[0].beatmapset_id}/download)`
+                                    let m2d = `PP: ${parseInt(bodyt[1].pp)}pp ${ifFCPP2}\nAccuracy: ${acc2}% (${bodyt[1].count300}/${bodyt[1].count100}/${bodyt[1].count50}/${bodyt[1].countmiss})\nCombo: ${bodyt[1].maxcombo}x / ${map2[0].max_combo}x\n${mods2}Grade:  ${rank2}\nMapper: ${map2[0].creator} | [Download](https://osu.ppy.sh/beatmapsets/${map2[0].beatmapset_id}/download)`
+                                    let m3d = `PP: ${parseInt(bodyt[2].pp)}pp ${ifFCPP3}\nAccuracy: ${acc3}% (${bodyt[2].count300}/${bodyt[2].count100}/${bodyt[2].count50}/${bodyt[2].countmiss})\nCombo: ${bodyt[2].maxcombo}x / ${map3[0].max_combo}x\n${mods3}Grade:  ${rank3}\nMapper: ${map2[0].creator} | [Download](https://osu.ppy.sh/beatmapsets/${map3[0].beatmapset_id}/download)`
+
+                                    //send the top plays of entered user
+
+                                    message.channel.send({ "embed": {
+                                    "title": `Top plays from: ${pname}`,
+                                    "url": purl,
+                                    "color": 16399236,
+                                    "fields": [
+                                        {
+                                        "name": m1t,
+                                        "value": m1d
+                                        },
+                                        {
+                                        "name": m2t,
+                                        "value": m2d
+                                        },
+                                        {
+                                        "name": m3t,
+                                        "value": m3d
+                                    }]}});
                                 });
                             });
                         });
@@ -901,53 +941,75 @@ function top(pAPI, tAPI, pUrl, client, message, args, nameIndex, server) {
             });
         });
     });
-
     return;
 }
 
+//get last plays
 function last(client, message, args, nameIndex, rAPI, pAPI, server, aviUrl) {
     let username;
+    //if a user is entered
     if(args[nameIndex]) {
+        //username is everything from the nameIndex and after that
         username = args.slice(nameIndex).join(" ");
     } else
+    //if no username is entered
     if(!args[nameIndex]) {
+        //get the default username from the database
         username = client.osuNames.get(message.author.id, server);
     }
+    //if the user didn't change their name return
     if(username === '-') return message.channel.send("Please enter a user");
+    //anti ping stuff
     if(username.includes("@everyone")) return message.channel.send("Please don't try to abuse the recent command by pinging everyone");
     if(username.includes("@here")) return message.channel.send("Please don't try to abuse the recent command by pinging everyone");
+    //if someone tries to request other modes i explained this in the top command
     if(username.includes("&m=")) return message.channel.send("I'm sorry but the bot doesn't support any other modes than standard");
 
+    //apis
     let recent = rAPI + username.split(' ').join('%20');
     let profile = pAPI + username.split(' ').join('%20');
     let mapAPI = client.config.banchoMapApi;
 
+    //i explained this in the profile function
     if(!username) return message.channel.send("Please enter a user!");
-    
+    //request the profile
     client.snekfetch.get(profile).then((r) => {
         let bodyp = r.body;
+        //request the recent plays
         client.snekfetch.get(recent).then((a) => {
             let bodyr = a.body;
+            //if no profile
             if(!bodyp[0]) return message.channel.send("I couldn't find " + username);
             let pname = bodyp[0].username;
+            //if no recent plays
             if(!bodyr[0]) return message.channel.send(pname + " doesn't have any recent plays");
             let mapn = mapAPI + bodyr[0].beatmap_id;
+            //request the most recent map
             client.snekfetch.get(mapn).then((m) => {
-                let map = m.body;
+                let map = m.body;  
 
+                //grades to discord emojis
                 let rank = rankToEmoji(bodyr, 0, client);
-
+                //calculate acc
                 let accn = accCalculation(bodyr, 0);
                 let acc = accCalculation(bodyr, 0).toString().substring(0, 5);
+                //calculate which mods are with bitwise blabla look in that function for more documentation
                 let mods = modCalculation(client, bodyr, 0);
                 let rawMods = bodyr[0].enabled_mods;
 
+                //request the html of the most recent map
                 client.request('http://osu.ppy.sh/osu/' + bodyr[0].beatmap_id, (error, response, body) => {
+                    //calculate if fc pp
                     let ifFCPP = ifFCPPCalculation(rawMods, client, bodyr, 0, map, body, accn);
+                    //calculate star rating
                     let stars = srCalculation(rawMods, body, client);
+                    //calculate pp
                     let pp = ppCalculation(rawMods, accn, body, bodyr, 0, client);
+                    //put the map title together
                     let mt = `${map[0].artist} - ${map[0].title} [${map[0].version}] (${stars}*)`;
+                    //put the description together
                     let md = `PP: ${pp}pp ${ifFCPP}\nAccuracy: ${acc}% (${bodyr[0].count300}/${bodyr[0].count100}/${bodyr[0].count50}/${bodyr[0].countmiss})\nCombo: ${bodyr[0].maxcombo}x / ${map[0].max_combo}x\n${mods}Grade:  ${rank}\nMapper: ${map[0].creator} | [Download](https://osu.ppy.sh/beatmapsets/${map[0].beatmapset_id}/download)`;
+                    //send most recent play of entered user
                     message.channel.send({ "embed": {
                         "color": 16399236,
                         "footer": {
@@ -967,7 +1029,7 @@ function last(client, message, args, nameIndex, rAPI, pAPI, server, aviUrl) {
     });
     return;
 }
-
+//function to turn status= in the appropriate url stuff for bloodcat
 function mapNameCutter(name) {
     name = name.split(' ').join('%20')
     .split('status=ranked').join('&c=b&s=1&m=&g=&l=')
@@ -984,9 +1046,10 @@ function mapNameCutter(name) {
     
     return name; 
 }
-
+//turn the ranks to discord emojis
 function rankToEmoji(body, bodyIndex, client) {
     let rank;
+    //should be fairly self explaining
     if(body[bodyIndex].rank === 'X') {
         rank = client.config.osuX;
     } else
@@ -1017,7 +1080,8 @@ function rankToEmoji(body, bodyIndex, client) {
     return rank;
 }
 
-//I hate gatari so much
+//I hate gatari so much 
+//same thing as above just for gatari cause they are special ed kids
 function rankToEmojiGatariEdition(body, bodyIndex, client) {
     let ranking;
     if(body[bodyIndex].ranking === 'X') {
@@ -1049,154 +1113,194 @@ function rankToEmojiGatariEdition(body, bodyIndex, client) {
     }
     return ranking;
 }
-
+//calculate the accuracy (yes)
 function accCalculation(body, bodyIndex) {
     let acc300s = parseFloat(body[bodyIndex].count300);
     let acc100s = parseFloat(body[bodyIndex].count100);
     let acc50s = parseFloat(body[bodyIndex].count50);
     let accmiss = parseFloat(body[bodyIndex].countmiss);
+    //((300s * 300 + 100s * 100 + 50s * 50 + miss)/(300s + 100s + 50s + miss) * 300)
     let acc = ((acc300s * 300 + acc100s * 100 + acc50s * 50 + accmiss * 0)/((acc300s + acc100s + acc50s + accmiss) * 300) * 100);
     return acc;
 }
 
+//calculate the mods cause that's needed yes i know
 function modCalculation(client, body, bodyIndex) {
+    //get the raw mods
     let rawMods = body[bodyIndex].enabled_mods;
+    //set mods to no mod i made a config thing for it so that i dont have to change so much stuff
     let mods = client.config.noMod;
+    //if mods is 0 then mods can stay no mod
     if(rawMods > 0) {
-      mods = nearestPow2(rawMods);
+        /*calculate mods with nearest to the power of 2 stuff idk thanks for the people
+        that i worked for they helped me with this i can do maths so yea lOl*/
+        mods = nearestPow2(rawMods);
     }
     return mods;
 }
 
+//break the mods into pieces by getting the nearest power of 2 or some shit idk
 function nearestPow2(mods) {
+    //create new array
     let modlist = [];
     let i = 1;
+    /*while mods isn't no mod and the i < 50 is just in case there happens something bad 
+    i dont want my bot to keep on doing that while thing cause my pc bad*/
     while(mods!=0 && i < 50) {
+        //i dont know what this is dont ask me i dont speak maths
         mod = 1 << 31 - Math.clz32(mods);
+        //push the mod in the mod list
         modlist.push(mod);
+        //remove the number from the mods
         mods = mods - mod;
+        //add one to i just in case
         i++;
     }
-  
-replaceIntWithMod(modlist);
+    
+    //replace bitwise mod numbers with discord emojis
+    replaceIntWithMod(modlist);
+    //if the mod list isn't empty return the mods
     if(modlist.length != 0) return "Mods: " + modlist.join(' ') + " |  ";
 }
-  
+
+//function to replace the bitwise mod numbers with discord emojis
 function replaceIntWithMod(a) {
     num = 0;
+    //while the number is less than the mod list length repeat
     while(num <= a.length) {
-    if(a.includes(Mods.None)) {
-        let i = a.indexOf(Mods.None);
-        a[i] = "NoMod";
-    } else if(a.includes(Mods.Easy)) {
-        let i = a.indexOf(Mods.Easy);
-        a[i] = "<:EZ:553697395465125901>";
-    } else if(a.includes(Mods.NoFail)) {
-        let i = a.indexOf(Mods.NoFail);
-        a[i] = "<:NF:553697395691487324>";
-    } else if(a.includes(Mods.TouchDevice)) {
-        let i = a.indexOf(Mods.TouchDevice);
-        a[i] = "Touch Device";
-    } else if(a.includes(Mods.Hidden)) {
-        let i = a.indexOf(Mods.Hidden);
-        a[i] = "<:HD:553697396274757642>";
-    } else if(a.includes(Mods.HardRock)) {
-        let i = a.indexOf(Mods.HardRock);
-        a[i] = "<:HR:553697395322650636>";
-    } else if(a.includes(Mods.SuddenDeath)) {
-        if(!a.includes(Mods.Perfect)) {
-        let i = a.indexOf(Mods.SuddenDeath);
-        a[i] = "<:SD:553697395045564427>";
-        } else {
-        let i = a.indexOf(Mods.SuddenDeath);
-        a[i] = "";
-        }
-    } else if(a.includes(Mods.Relax)) {
-        let i = a.indexOf(Mods.Relax);
-        a[i] = "<:RX:553697395116867587>";
-    } else if(a.includes(Mods.HalfTime)) {
-        let i = a.indexOf(Mods.HalfTime);
-        a[i] = "<:HT:553697395846938624> ";
-    } else if(a.includes(Mods.SpunOut)) {
-        let i = a.indexOf(Mods.SpunOut);
-        a[i] = "<:SO:553697395490422795>";
-    } else if(a.includes(Mods.DoubleTime)) {
-        if(!a.includes(Mods.Nightcore)) {
-        let i = a.indexOf(Mods.DoubleTime);
-        a[i] = "<:DT:553697396677279764> ";
-        } else {
-        let i = a.indexOf(Mods.DoubleTime);
-        a[i] = "";
-        }
-    } else if(a.includes(Mods.Nightcore)) {
-        let i1 = a.indexOf(Mods.Nightcore);
-        a[i1] = "<:NC:553697395796344853>";
-    } else if(a.includes(Mods.Flashlight)) {
-        let i = a.indexOf(Mods.Flashlight);
-        a[i] = "<:FL:553697395498549250>";
-    } else if(a.includes(Mods.Autoplay)) {
-        let i = a.indexOf(Mods.Autoplay);
-        a[i] = "<:Auto:553697397444706308>";
-    } else if(a.includes(Mods.Relax2)) {
-        let i = a.indexOf(Mods.Relax2);
-        a[i] = "<:AP:553697395578372126>";
-    } else if(a.includes(Mods.Perfect)) {
-        let i1 = a.indexOf(Mods.Perfect);
-        a[i1] = "<:PF:553697395494617118>";
-    } 
+        //this should all be self explainable
+        if(a.includes(Mods.None)) {
+            let i = a.indexOf(Mods.None);
+            a[i] = "NoMod";
+        } else if(a.includes(Mods.Easy)) {
+            let i = a.indexOf(Mods.Easy);
+            a[i] = "<:EZ:553697395465125901>";
+        } else if(a.includes(Mods.NoFail)) {
+            let i = a.indexOf(Mods.NoFail);
+            a[i] = "<:NF:553697395691487324>";
+        } else if(a.includes(Mods.TouchDevice)) {
+            let i = a.indexOf(Mods.TouchDevice);
+            a[i] = "Touch Device";
+        } else if(a.includes(Mods.Hidden)) {
+            let i = a.indexOf(Mods.Hidden);
+            a[i] = "<:HD:553697396274757642>";
+        } else if(a.includes(Mods.HardRock)) {
+            let i = a.indexOf(Mods.HardRock);
+            a[i] = "<:HR:553697395322650636>";
+        /*if the mods include perfect then sudden death is
+         there too so we have to remove it if its both*/
+        } else if(a.includes(Mods.SuddenDeath)) {
+            if(!a.includes(Mods.Perfect)) {
+            let i = a.indexOf(Mods.SuddenDeath);
+            a[i] = "<:SD:553697395045564427>";
+            } else {
+            let i = a.indexOf(Mods.SuddenDeath);
+            a[i] = "";
+            }
+        } else if(a.includes(Mods.Relax)) {
+            let i = a.indexOf(Mods.Relax);
+            a[i] = "<:RX:553697395116867587>";
+        } else if(a.includes(Mods.HalfTime)) {
+            let i = a.indexOf(Mods.HalfTime);
+            a[i] = "<:HT:553697395846938624> ";
+        } else if(a.includes(Mods.SpunOut)) {
+            let i = a.indexOf(Mods.SpunOut);
+            a[i] = "<:SO:553697395490422795>";
+        //same thing as with sudden death & perfect we have to remove double time if nightcore is included
+        } else if(a.includes(Mods.DoubleTime)) {
+            if(!a.includes(Mods.Nightcore)) {
+            let i = a.indexOf(Mods.DoubleTime);
+            a[i] = "<:DT:553697396677279764> ";
+            } else {
+            let i = a.indexOf(Mods.DoubleTime);
+            a[i] = "";
+            }
+        } else if(a.includes(Mods.Nightcore)) {
+            let i1 = a.indexOf(Mods.Nightcore);
+            a[i1] = "<:NC:553697395796344853>";
+        } else if(a.includes(Mods.Flashlight)) {
+            let i = a.indexOf(Mods.Flashlight);
+            a[i] = "<:FL:553697395498549250>";
+        } else if(a.includes(Mods.Autoplay)) {
+            let i = a.indexOf(Mods.Autoplay);
+            a[i] = "<:Auto:553697397444706308>";
+        } else if(a.includes(Mods.Relax2)) {
+            let i = a.indexOf(Mods.Relax2);
+            a[i] = "<:AP:553697395578372126>";
+        } else if(a.includes(Mods.Perfect)) {
+            let i1 = a.indexOf(Mods.Perfect);
+            a[i1] = "<:PF:553697395494617118>";
+        } 
     num++;
     }
 }
 
+//function to calculate pp
 function ppCalculation(mods, accn, requestBody, body, bodyIndex, client) {
     let acc_percent = parseFloat(accn);
     let combo = parseInt(body[bodyIndex].maxcombo);
     let nmiss = parseInt(body[bodyIndex].countmiss);
-    
+    //create a new parser
     let parser = new client.ojs.parser().feed(requestBody);
+    //parse the map
     let map = parser.map;
+    //calculate the star rating
     let rawStars = new client.ojs.diff().calc({map: map, mods: mods});
-  
+    //calculate the pp
     let rawPP = client.ojs.ppv2({
       stars: rawStars,
       combo: combo,
       nmiss: nmiss,
       acc_percent: acc_percent,
     });
+    //just take the total pp and fix it
     let pp = rawPP.total.toFixed(2);
     return pp;
 }
 
+//calculate the star rating
 function srCalculation(mods, requestBody, client) {
+    //create new parser
     let parser = new client.ojs.parser().feed(requestBody);
+    //parse the map
     let map = parser.map;
+    //calculate the star rating
     let rawStars = new client.ojs.diff().calc({map: map, mods: mods});
+    //just take the total star rating and fix it
     let stars = rawStars.total.toFixed(2);
     return stars;
 }
 
+//calculate if fc pp 
+//this doesn't take the misses from the accuracy i didnt wanted to calculate accuracy again
 function ifFCPPCalculation(mods, client, body, bodyIndex, mapBody, requestBody, accn) {
+    //create new parser
     let parser = new client.ojs.parser().feed(requestBody);
+    //parse the map
     let map = parser.map;
+    //calculate star rating
     let rawStars = new client.ojs.diff().calc({map: map, mods: mods});
-
+    //make empty variable if the player fced
     let ifFCPP = "";
+    //if it isnt a fc
     if(body[bodyIndex].maxcombo != mapBody[0].max_combo) {
-      let comboFC = parseInt(mapBody[0].max_combo);
-      let nmissFC = parseInt(0);
-      let acc_percent = parseFloat(accn);
-
-      fcPP = client.ojs.ppv2({
-        stars: rawStars,
-        combo: comboFC,
-        nmiss: nmissFC,
-        acc_percent: acc_percent,
-      });
-      ifFCPP = "=> " + fcPP.total.toFixed(2) + "pp";
+        let comboFC = parseInt(mapBody[0].max_combo);
+        let nmissFC = parseInt(0);
+        let acc_percent = parseFloat(accn);
+        //calculate if fc pp
+        fcPP = client.ojs.ppv2({
+            stars: rawStars,
+            combo: comboFC,
+            nmiss: nmissFC,
+            acc_percent: acc_percent,
+        });
+        //change the variable
+        ifFCPP = "=> " + fcPP.total.toFixed(2) + "pp";
     }
     return ifFCPP;
 }
 
+//change the status to a string
 function getStatus(mapn) {
     let status;
     if(mapn[0].approved === "4") {
@@ -1223,15 +1327,21 @@ function getStatus(mapn) {
     return status;
 }
 
+//change maps difficulty to icons instead of numbers
 function diffInIcon(mapn) {
     let i = 0;
+    //new array
     let icons = [];
+    //while there are sub diffs
     while(mapn[i]) {
         let diff = mapn[i].difficultyrating;
+        //push the diff in array
         icons.push(diff);
         i++;
     }
+    //sort the beatmaps by difficulty
     icons.sort();
+    //turn the diff numbers to icons
     bigLarryLover(icons);
     return icons.join('');
 }
@@ -1239,6 +1349,7 @@ function diffInIcon(mapn) {
 //don't mind that name hehe
 function bigLarryLover(a) {
     let num = 0
+    //number is less or equal to the items in the array
     while(num <= a.length) {
         if(a[num] >= "0" && a[num] < "2") {
             a[num] = "<:Easy:554700646503284764>";
@@ -1262,6 +1373,7 @@ function bigLarryLover(a) {
     }
 }
 
+//send help message for the priv servers lOl
 function sendPrivServerHelp(message, server, p) {
     message.channel.send({"embed": {
         "description": "**" + server + ":** \n\nusage: " + p + "osu " + server +" <command>\n\nprofile <name>: ``sends a " + server + " profile card``\nlast <name>: ``sends recent plays of entered user``\ntop <name> ``sends top plays of entered user``\n\naliases: p, l, t",
@@ -1269,6 +1381,8 @@ function sendPrivServerHelp(message, server, p) {
     }});
 }
 
+
+//bitwise enum of all mods
 var Mods =
 {
 	None           : 0,
