@@ -282,7 +282,7 @@ function favourites(favs) {
 function nominations(noms) {
   let nom = "";
   if(noms != 0) {
-    nom = ` ${noms} :thumbup::skin-tone-1: `;
+    nom = ` ${noms} :thumbup: `;
   }
   return nom;
 }

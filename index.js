@@ -1,38 +1,26 @@
-/*
-* this is just to make a new line after clearing the command prompt and running the bot with
-* DOSKEY bot=cd your-bot-dir $T cls $T node index.js
-*/
-
-console.log("->");
-
-/* so that is looks like this
-
-your-bot-dir>->
-The configurations for 8 servers have been loaded
-33 commands have been loaded
-The osu names of 78 users have been loaded
-Felix 🦋 started using version 3.0.3
-
-
-instead of
-
-your-bot-dir>The configurations for 8 servers have been loaded
-33 commands have been loaded
-The osu names of 78 users have been loaded
-Felix 🦋 started using version 3.0.3
-*/
-
-
 
 /*
-to install these you have to type "npm install name of module"
 
-the names of the modules are in the () below
+before you can run the bot on a new machine 
+1. open the modules installer
+2. put your own tokens in these files:
 
-enmap needs better-sqlite-pool (https://enmap.evie.codes/install)
-the rest should just work without anything
+  Step 1: discord token in config.json (line 4)
+  Step 2: osu tokens in config.json (line 6 until line 11 after k=your-token)
+  Step 3: beatconnect token in config.json (line 16)
 
-imports:
+  you can get the tokens from:
+    discord token:
+      https://discordapp.com/developers/applications/app-id/bots
+    osu token:
+      https://old.ppy.sh/p/api
+    beatconnect token:
+      private, ask the creator for token
+
+3. open run.bat
+
+Please just use for reference
+
 */
 
 const Discord = require("discord.js");
@@ -68,7 +56,32 @@ client.edaters = new Enmap({name: "edaters"});
 client.edateRequest = new Enmap({name: "edateRequest"});
 client.sex = new Enmap({name: "sex"});
 client.sexRequest = new Enmap({name: "sexRequest"});
+client.kids = new Enmap({name: "kids"});
+client.birthRequest = new Enmap({name: "birthRequest"});
 
+/*
+* this is just to make a new line after clearing the command prompt and running the bot with
+* DOSKEY bot=cd your-bot-dir $T cls $T node index.js
+*/
+
+console.log("->");
+
+/* so that is looks like this
+
+your-bot-dir>->
+The configurations for 8 servers have been loaded
+33 commands have been loaded
+The osu names of 78 users have been loaded
+Felix 🦋 started using version 3.0.3
+
+
+instead of
+
+your-bot-dir>The configurations for 8 servers have been loaded
+33 commands have been loaded
+The osu names of 78 users have been loaded
+Felix 🦋 started using version 3.0.3
+*/
 
 //load databases & log it
 client.database.defer.then( () => {console.log(`The configurations for ${client.database.size} servers have been loaded`);});

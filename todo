@@ -1,11 +1,3 @@
-            Steps before I release the bot:
-
-            Step 1: Remove discord token from config.json
-            Step 2: Remove osu tokens from config.json
-            Step 3: Remove beatconnect token from config.json
-            Step 4: Remove beatconnect docs from config.json
-
-
             Actual todo (not in an order):
 
             (beatconnect.js):
@@ -43,10 +35,26 @@
             1. fix [ws] [connection] Server closed the WebSocket connection: 1000
             2. look for other todos I wrote down within the bot
             3. add me command
-            4. add something that you can do when you're pregnant //hgoly shit what is wrong with me
-            5. add sleep and wake up command to count how long someone is sleeping //cool idea by badgraphics :3
+            4. add sleep and wake up command to count how long someone is sleeping //cool idea by badgraphics :3
+            5. improve my github wiki with a lot of documentation
+            6. add epregnancy to help
+            7. add kids database for every kid
 
             (esex.js / message.js esex function)
 
             1. add esex counter
-            2. fix multiple esex requests at once idk
+            2. make it so that you dont have to ping your partner considering you can only esex them
+
+            (edate.js)
+
+            1. add that you can just say a name instead of mention
+
+
+            ideas for kids
+
+            make database where i store all kids with the format nameuserid
+
+
+            ideas for compare
+
+            make database for the last map requested on the guild the command is executed where i save the beatmap id (not set) 

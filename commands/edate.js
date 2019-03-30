@@ -1,6 +1,5 @@
 exports.run = (client, message, args, p) => {
     let partner = client.edaters.get(message.author.id, "partner");
-    client.edateRequest.ensure(partner, {request: "false", requester: "-"});
     //if first args are breakup or first and second args are break up
     if(args[0] === "breakup" || args[0] + args[1] === "breakup") {
         //if you're no dating anyone return
@@ -9,6 +8,9 @@ exports.run = (client, message, args, p) => {
         //set partner of both to -
         client.edaters.set(message.author.id, "-", "partner");
         client.edaters.set(partner, "-", "partner");
+        //reset the edate date
+        client.edaters.set(message.author.id, "-", "edateDate");
+        client.edaters.set(partner, "-", "edateDate");
     //if no first args
     } else if(!args[0]) {
         //if no partner
@@ -22,6 +24,7 @@ exports.run = (client, message, args, p) => {
         //if no user mentioned
         if(!message.mentions.users.first()) return message.channel.send("Please mention the user that you want to edate");
         let userID = message.mentions.users.first().id;
+        client.edateRequest.ensure(userID, {partner: "-", edateDate: "-"});
         if(client.edateRequest.get(userID, "requester") === message.author.id) return message.channel.send("You already asked them if they want to edate you wait for an response first!");
         //you can't edate yourself that makes no sense
         if(userID === message.author.id) return message.channel.send("You can't edate yourself :sob:");
@@ -63,3 +66,4 @@ exports.run = (client, message, args, p) => {
         }
     }
 }
+

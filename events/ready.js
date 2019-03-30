@@ -10,6 +10,7 @@ module.exports = (client) => {
     //reset all requests & requesters when starting to prevent buggy behaviour
     client.sexRequest.deleteAll();
     client.edateRequest.deleteAll();
+    client.birthRequest.deleteAll();
 
     /*this code can be used to log the guilds not recommended for bigger bots though
     

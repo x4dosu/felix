@@ -1,48 +1,47 @@
 exports.run = (client, message, args, p) => {
-    //if no user mentioned
-    if(!message.mentions.users.first()) return message.channel.send("Please mention the user that you want to have esex with");
-    
-    let userID = message.mentions.users.first().id;
+    let pinged = false;
+    if(message.mentions.users.first()) {
+        pinged = message.mentions.users.first().id;
+    }
+    let userID = message.author.id;
     let partner = client.edaters.get(message.author.id, "partner");
 
     client.sexRequest.ensure(partner, {eSexRequest: false, eSexRequester: "-"});
     //if you have no partner
-    if(partner === "-") {
-        message.channel.send("You're not dating anyone to have esex with");
+    if(pinged !== partner && pinged !== false) {
+        if(partner === "-") {
+            message.channel.send(`You're not dating <@${pinged}>! You can date them with \`${p}edate <@name#0000>\``);
+        } else {
+            message.channel.send(`You're dating <@${partner}>! Don't cheat on them`);
+        }
     } else
-    //if your partner is the person you mentioned
-    if(userID === partner) {
-        let sexer = client.users.get(userID);
+    if(partner === "-") {
+        message.channel.send("You're not dating anyone! Date someone with `"+p+"edate <@name#0000>`");
+    } else 
+    if(!message.mentions.users.first() || pinged === partner) {
+        let sexer = client.users.get(partner);
+        if(client.kids.get(partner, "pregnancy")) return message.channel.send(`Your partner is currently pregnant, tell him to either abort or give birth to their kid with \`${p}eabort\` or \`${p}ebirth\``);
+        if(client.kids.get(userID, "pregnancy")) return message.channel.send(`You're currently pregnant. You can either \`${p}eabort\` or \`${p}ebirth\``);
         if(client.sexRequest.get(partner, "eSexRequest")) return message.channel.send("You already have an esex request open!");
         if(client.sexRequest.get(userID, "eSexRequest")) return message.channel.send("You still have to answer to an esex request!");
         //set the request for esex to true
-        client.sexRequest.set(userID, true, "eSexRequest");
+        client.sexRequest.set(partner, true, "eSexRequest");
         //set your id as the requester
-        client.sexRequest.set(userID, message.author.id, "eSexRequester");
+        client.sexRequest.set(partner, message.author.id, "eSexRequester");
         //send sex message cowboy
         message.channel.send(`<@${sexer.id}>, do you want to have esex with <@${message.author.id}>? \`yes\` or \`no\``)
         .then(setTimeout(
             function(){
                 //if no answer
-                if(!client.sex.get(userID, "consent") && client.sexRequest.get(userID, "eSexRequest")) {
+                if(client.sex.get(partner, "consent") === false && client.sexRequest.get(partner, "eSexRequest") === true) {
                     //reset requests
-                    client.sexRequest.set(userID, false, "eSexRequest");
-                    client.sexRequest.set(userID, "-", "eSexRequester");
+                    client.sexRequest.set(partner, false, "eSexRequest");
+                    client.sexRequest.set(partner, "-", "eSexRequester");
                     
                     message.channel.send(`<@${partner}> didn't give you consent`);
-                    return;
-                //else if they answered and said yes / no
-                } else {
-                    client.sexRequest.set(userID, false, "eSexRequest");
-                    client.sexRequest.set(userID, "-", "eSexRequester");
                     return;
                 }
             //60 seconds
         }, 60000));
-    } else {
-        //if you try to have esex with yourself wtf
-        if(userID === message.author.id) return message.channel.send("Stop trying to have esex with yourself that doesn't even make sense");
-        //if you try to cheat on your partner
-        message.channel.send("Don't cheat on your partner!")
     }
 }

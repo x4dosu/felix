@@ -41,6 +41,22 @@ yandere <tag> :: ${client.config.yandereCmd}
 danbooru <tag> :: ${client.config.danbooruCmd}\`\`\``);
             return;
         } else
+        //if the args are equal to fun then lets have fun :3
+        if(help === "fun") {
+            message.channel.send(`\`\`\`asciidoc
+edate <name | breakup> :: ${client.config.edateCmd}
+
+esex <name> :: ${client.config.esexCmd}
+
+epregnancy :: ${client.config.epregnancyCmd}
+
+ebirth :: ${client.config.ebirthCmd}
+
+eabort :: ${client.config.eabortCmd}
+
+me <name> :: ${client.config.meCmd}\`\`\``);
+            return;
+        }
         //if the args are equal to util
         if(help === "util") {
             message.channel.send(`\`\`\`asciidoc
@@ -49,10 +65,6 @@ help :: ${client.config.helpCmd}
 ping :: ${client.config.pingCmd}
 
 credits :: ${client.config.creditsCmd}
-
-edate <name | breakup> :: ${client.config.edateCmd}
-
-esex <name> :: ${client.config.esexCmd}
 
 config set <property> <value> :: ${client.config.configCmd}\`\`\``);
             return;
@@ -111,8 +123,12 @@ eval <code> :: ${client.config.evalCmd}\`\`\``);
                 "value": "gelbooru, yandere, danbooru"
             },
             {
+                "name": "FUN",
+                "value": "edate, esex, epregnancy, ebirth, eabort, me"
+            },
+            {
                 "name": "UTIL:",
-                "value": "help, ping, credits, edate, esex, config"
+                "value": "help, ping, credits, config"
             },
             {
         "name": "USEFUL LINKS:",

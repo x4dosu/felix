@@ -3,11 +3,34 @@ module.exports = (client, message) => {
     client.database.ensure(message.guild.id, client.defaultSettings);
     client.specialNSFW.ensure(message.author.id, {nsfw: false});
     client.osuNames.ensure(message.author.id, client.osuConfig);
-    client.edaters.ensure(message.author.id, {partner: "-"});
+    client.edaters.ensure(message.author.id, {partner: "-", edateDate: "-"});
     client.edateRequest.ensure(message.author.id, {request: "false", requester: "-"});
     client.sex.ensure(message.author.id, {virginity: true, pregnancy: false, consent: false});
     client.sexRequest.ensure(message.author.id, {eSexRequest: false, eSexRequester: "-"});
-    
+    client.kids.ensure(message.author.id, {pregnancy: false, parent1: message.author.id, parent2: "-", kids: []});
+    client.birthRequest.ensure(message.author.id, {test: false, birthRequest: false});
+
+    //if a birthRequest is open
+    if(client.birthRequest.get(message.author.id, "birthRequest")) {
+      let kidName = message.content;
+      if(kidName.includes("@everyone") || kidName.includes("@here")) return message.channel.send("The name of your kid can't include that");
+      if(client.kids.get(message.author.id, "parent2") === "-") return;
+      let parent2 = client.kids.get(message.author.id, "parent2");
+      //if you or  your partner alredady have that name
+      if(client.kids.get(message.author.id, "kids").includes(kidName)) return message.channel.send("You already have a kid with that name");
+      if(client.kids.get(parent2, "kids").includes(kidName)) return message.channel.send("Your partner already has a kid with that name");
+      //add the kid to the kids array
+      client.kids.push(message.author.id, kidName, "kids");
+      client.kids.push(parent2, kidName, "kids");
+      //set parent2 to -
+      client.kids.set(message.author.id, "-", "parent2");
+      //set pregnancy to false
+      client.kids.set(message.author.id, false, "pregnancy");
+      //set the birth request to false
+      client.birthRequest.set(message.author.id, false, "birthRequest");
+      message.channel.send(`You gave birth to ${kidName} and the other parent is <@${parent2}>`);
+      return;
+    }
     //if the author of the message has a edate request open
     if(client.edateRequest.get(message.author.id, "request") === "true") {
       //if they say yes
@@ -23,6 +46,9 @@ module.exports = (client, message) => {
           //reset the request
           client.edateRequest.set(message.author.id, "false", "request");
           client.edateRequest.set(message.author.id, "-", "requester");
+          //set the edate date
+          client.edaters.set(message.author.id, edateDate(), "edateDate");
+          client.edaters.set(requester, edateDate(), "edateDate");
         } else {
           //reset the request
           client.edateRequest.set(message.author.id, "false", "request");
@@ -58,7 +84,6 @@ module.exports = (client, message) => {
         client.sexRequest.set(userID, "-", "eSexRequester");
       }
     }
-
     //ignore bots
     if (message.author.bot) return;
     //if message doesn't start with the prefix ignore it
@@ -129,21 +154,23 @@ function eSex(client, message) {
     let i = getRandomInt(100);
     //if the number is 69 then you get pregnant wtf is wrong with me i want to die
     //otherwise if i ever wanted to increase the chance there is the second thing
-    if(i === 69 /*i > 40 && i < 50*/) {
+    if(i >= 69 && i <= 79) {
       //get a random number (0 - 1)
       let pregnant = getRandomInt(2);
       if(pregnant === 1) {
-        client.sex.set(userID, true, "pregnancy");
+        client.kids.set(userID, true, "pregnancy");
+        client.kids.set(userID, partner, "parent2");
         message.channel.send(`<@${partner}> you have made <@${userID}> pregnant :pregnant_woman: ${virgin}`);
-        client.sex.set(userID, true, "consent");
+        client.sex.set(userID, false, "consent");
       } else if(pregnant === 0) {
-        client.sex.set(partner, true, "pregnancy");
+        client.kids.set(partner, true, "pregnancy");
+        client.kids.set(partner, userID, "parent2");
         message.channel.send(`<@${userID}> you have made <@${partner}> pregnant :pregnant_woman: ${virgin}`);
-        client.sex.set(userID, true, "consent");
+        client.sex.set(userID, false, "consent");
       }
     //if no one gets pregnant then just that you better not get yourself pregnant lOl
     } else {
-      message.channel.send(`You had esex with <@${partner}>. ${virgin}`);
+      message.channel.send(`You had esex with <@${partner}>. ${virgin} (you rolled a ${i})`);
       client.sex.set(userID, false, "consent");
     }
   }, 1000));
@@ -151,6 +178,49 @@ function eSex(client, message) {
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
+}
+
+function edateDate() {
+  let str = "";
+  let currentTime = new Date();
+  let year = currentTime.getFullYear()
+  let months = currentTime.getMonth();
+  let days = currentTime.getDay();
+  let hours = currentTime.getHours();
+  let utcHours = currentTime.getUTCHours();
+  let minutes = currentTime.getMinutes();
+  let seconds = currentTime.getSeconds();
+  
+  let timezone = hours - utcHours;
+  if(timezone >= 0) {
+    timezone = "UTC+" + timezone;
+  } else {
+    timezone = "UTC-" + timezone;
+  }
+   
+  if(months < 10) {
+      months = "0" + months;
+  } 
+  if(days < 10) {
+      days = "0" + days;
+  }
+  if(hours < 10) {
+      hours = "0" + hours;
+  }
+  if(minutes < 10) {
+      minutes = "0" + minutes;
+  }
+  if(seconds < 10) {
+    seconds = "0" + seconds;
+  }
+  let pmAm;
+  if(hours > 11){
+      pmAm = "PM";
+  } else {
+      pmAm = "AM";
+  }
+  str += `${hours}:${minutes}:${seconds}${pmAm} ${days}-${months}-${year} (${timezone})`;
+  return str;
 }
 
 function time() {
