@@ -1,20 +1,20 @@
 {
   "_comment": "Top of the file has critical things that I have to change before releasing - lower part has safe things",
 
-  "token": "your-discord-token",
+  "token": "discord-token",
 
-  "banchoProfileApi": "https://osu.ppy.sh/api/get_user?k=your-osu-token&u=",
-  "banchoTopApi": "https://osu.ppy.sh/api/get_user_best?k=your-osu-token&u=",
-  "banchoRecentApi": "https://osu.ppy.sh/api/get_user_recent?k=your-osu-token&limit=1&u=",
-  "banchoMapApi": "https://osu.ppy.sh/api/get_beatmaps?k=your-osu-token&b=",
-  "banchoSetApi": "https://osu.ppy.sh/api/get_beatmaps?k=your-osu-token&s=",
-  "banchoUserMapApi": "https://osu.ppy.sh/api/get_beatmaps?k=your-osu-token&u=",
-  "banchoUserScoresApi": "https://osu.ppy.sh/api/get_scores?k=your-osu-token&b=",
+  "banchoProfileApi": "https://osu.ppy.sh/api/get_user?k=bancho-token&u=",
+  "banchoTopApi": "https://osu.ppy.sh/api/get_user_best?k=bancho-token&u=",
+  "banchoRecentApi": "https://osu.ppy.sh/api/get_user_recent?k=bancho-token&limit=1&u=",
+  "banchoMapApi": "https://osu.ppy.sh/api/get_beatmaps?k=bancho-token&b=",
+  "banchoSetApi": "https://osu.ppy.sh/api/get_beatmaps?k=bancho-token&s=",
+  "banchoUserMapApi": "https://osu.ppy.sh/api/get_beatmaps?k=bancho-token&u=",
+  "banchoUserScoresApi": "https://osu.ppy.sh/api/get_scores?k=bancho-token&b=",
 
-  "beatconnectToken": "your-beatconnect-token",
+  "beatconnectToken": "beatconnect-token",
   "beatconnectDocs": "",
 
-  "googleToken": "your-google-token",
+  "googleToken": "google-token",
 
 
   "prefix": "$",

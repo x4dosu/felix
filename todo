@@ -25,6 +25,8 @@
             6. add if less than four results to $osu maps 
             ^-//maybe even rewrite full command and make it more similar to the beatconnect cmd
             ^^--////maybe even make it use the beatconnect api :thinking: the uniqueIDs are just lowkey yikes
+            7. add if less than four results to $osu top
+            8. calculate if fc pp accurately by recalculating the accuracy without the misses
 
             (config.js):
 
