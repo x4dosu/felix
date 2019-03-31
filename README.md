@@ -20,6 +20,6 @@ Just open run.bat lol
 
 type node index.js
 
-### Stopping the bot:
+## Stopping the bot:
 
 ctrl+c on Windows
