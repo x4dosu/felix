@@ -359,6 +359,7 @@ exports.get = {
                             let accn3 = accCalculation(bodyc, 2);
                             let acc3 = accCalculation(bodyc, 2).toString().substring(0, 5);
                             let mods3 = modCalculation(client, bodyc, 2);
+				//jof
                             let rawMods3 = bodyc[2].enabled_mods;
                             let ifFCPP3 = ifFCPPCalculation(rawMods3, client, bodyc, 2, bodym, cBody, accn3);
                             let pp3 = parseFloat(bodyc[2].pp);
