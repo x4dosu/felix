@@ -6,8 +6,9 @@ before you can run the bot on a new machine
 2. put your own tokens in these files:
 
   Step 1: discord token in config.json (line 4)
-  Step 2: osu tokens in config.json (line 6 until line 11 after k=your-token)
-  Step 3: beatconnect token in config.json (line 16)
+  Step 2: osu tokens in config.json (line 6 until line 12 after k=your-token)
+  Step 3: beatconnect token in config.json (line 14)
+  Step 4: google token in config.json (line 17)
 
   you can get the tokens from:
     discord token:
@@ -16,6 +17,8 @@ before you can run the bot on a new machine
       https://old.ppy.sh/p/api
     beatconnect token:
       private, ask the creator for token
+    google token:
+      https://console.developers.google.com/apis/credentials?project=_
 
 3. open run.bat
 
@@ -33,8 +36,9 @@ const _ = require('lodash');
 const ojs = require("ojsama");
 const http = require("https");
 
-//the bot / client
+//create the bot / client object
 const client = new Discord.Client();
+
 //import for the config.json file
 const config = require("./config.json");
 
@@ -51,7 +55,10 @@ client.database = new Enmap({name: "database"});
 client.commands = new Enmap({name: "commands"});
 client.osuNames = new Enmap({name: "osu"});
 
+client.lastMap = new Enmap({name: "lastMap"});
+
 client.specialNSFW = new Enmap({name: "nsfwPlus"});
+
 client.edaters = new Enmap({name: "edaters"});
 client.edateRequest = new Enmap({name: "edateRequest"});
 client.sex = new Enmap({name: "sex"});

@@ -16,6 +16,8 @@ last <name> :: ${client.config.lastCmd}
 
 beatconnect <map name> :: ${client.config.beatconnectCmd}
 
+compare <name> :: ${client.config.compareCmd}
+
 akatsuki :: ${client.config.akatsukiCmd}
 
 ripple :: ${client.config.rippleCmd}
@@ -54,7 +56,7 @@ ebirth :: ${client.config.ebirthCmd}
 
 eabort :: ${client.config.eabortCmd}
 
-me <name> :: ${client.config.meCmd}\`\`\``);
+family <name> :: ${client.config.familyCmd}\`\`\``);
             return;
         }
         //if the args are equal to util
@@ -116,7 +118,7 @@ eval <code> :: ${client.config.evalCmd}\`\`\``);
             },
             {
                 "name": "OSU:",
-                "value": "osu, profile, top, last, beatconnect, akatsuki, ripple, gatari, kurikku, enshi, enjuu"
+                "value": "osu, profile, top, last, beatconnect, compare, akatsuki, ripple, gatari, kurikku, enshi, enjuu"
             },
             {
                 "name": "NSFW:",
@@ -124,7 +126,7 @@ eval <code> :: ${client.config.evalCmd}\`\`\``);
             },
             {
                 "name": "FUN",
-                "value": "edate, esex, epregnancy, ebirth, eabort, me"
+                "value": "edate, esex, epregnancy, ebirth, eabort, family"
             },
             {
                 "name": "UTIL:",

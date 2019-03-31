@@ -1,7 +1,7 @@
 {
   "_comment": "Top of the file has critical things that I have to change before releasing - lower part has safe things",
 
-  "token": "your discord token",
+  "token": "your-discord-token",
 
   "banchoProfileApi": "https://osu.ppy.sh/api/get_user?k=your-osu-token&u=",
   "banchoTopApi": "https://osu.ppy.sh/api/get_user_best?k=your-osu-token&u=",
@@ -9,29 +9,31 @@
   "banchoMapApi": "https://osu.ppy.sh/api/get_beatmaps?k=your-osu-token&b=",
   "banchoSetApi": "https://osu.ppy.sh/api/get_beatmaps?k=your-osu-token&s=",
   "banchoUserMapApi": "https://osu.ppy.sh/api/get_beatmaps?k=your-osu-token&u=",
+  "banchoUserScoresApi": "https://osu.ppy.sh/api/get_scores?k=your-osu-token&b=",
 
-  "banchoAviUrl": "https://a.ppy.sh/",
-  "banchoPUrl": "https://osu.ppy.sh/users/",
-
-  "beatconnectToken": "your-bitconnect-token",
+  "beatconnectToken": "your-beatconnect-token",
   "beatconnectDocs": "",
+
+  "googleToken": "your-google-token",
 
 
   "prefix": "$",
-  "version": "3.0.6",
+  "version": "3.0.7",
 
   "ownerID": "292700741435654155",
   "aaronID": "254373477878857729",
   "badgraphicsID": "170288836067196928",
+  "x4dID": "183815137126383617",
 
   "botInvite": "https://discordapp.com/api/oauth2/authorize?client_id=533659989202436096&scope=bot",
   "serverInvite": "https://discord.gg/pgvyKek",
 
-
+  "banchoAviUrl": "https://a.ppy.sh/",
+  "banchoPUrl": "https://osu.ppy.sh/users/",
 
   "bloodcatApi": "https://bloodcat.com/osu/?mod=json&q=",
 
-  "beatconnectSearchApi": "http://beatconnect.io/api/search/?token=",
+  "beatconnectSearchApi": "https://beatconnect.io/api/search/?token=",
 
   "gatariOldProfileApi": "https://osu.gatari.pw/api/v1/users/stats?u=",
   "gatariProfileApi": "https://api.gatari.pw/user/stats?id=",
@@ -82,6 +84,9 @@
   "gelbooru": "https://gelbooru-xsd8bjco8ukx.runkit.sh/posts?tags=",
 
 
+  "youtubeSearchApi": "https://www.googleapis.com/youtube/v3/search?part=snippet&q=",
+
+
   "noMod": "",
 
   "osuF": "<:osuF:556219352228036608>",
@@ -99,6 +104,7 @@
   "topCmd": "Get top plays of entered user",
   "lastCmd": "Get last plays of entered user",
   "beatconnectCmd": "Search for maps on beatconnect",
+  "compareCmd": "Compare your scores on the maps your friends recently got scores on",
   "akatsukiCmd": "Get akatsuki related commands",
   "rippleCmd": "Get ripple related commands",
   "gatariCmd": "Get gatari related commands",
@@ -107,17 +113,18 @@
   "enjuuCmd": "Get enjuu related commands",
   "kawataCmd": "Get kawata related commands",
 
+
   "gelbooruCmd": "Get random image from gelbooru.com with entered tag",
   "yandereCmd": "Get random image from yande.re with entered tag",
   "danbooruCmd": "Get random image from danbooru.donmai.us with entered tag",
 
 
   "edateCmd": "Edate or break up with someone",
-  "esexCmd": "Just don't even ask okay (1 / 100 chance to get pregnant lol)",
+  "esexCmd": "Just don't even ask okay (low chance to get pregnant XD)",
   "epregnancyCmd": "Check your pregananant status",
   "ebirthCmd": "Give birth lol",
   "eabortCmd": "Abort your kid xd",
-  "meCmd": "get your / an entered user's profile",
+  "familyCmd": "get your / an entered user's family",
 
 
   "helpCmd": "Get a list of all commands",

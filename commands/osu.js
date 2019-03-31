@@ -1,9 +1,12 @@
 exports.run = (client, message, args, p) => {
+    let osu = require("./functions/osuFunctions.js");
     let cfg = client.config;
     //if there are first args
     if(args[0]) {
         let firstArgs = args[0].toLowerCase();
         //if the first args are bloodcat or b
+
+        //todo rewrite bloodcat
         if(firstArgs === "bloodcat" || firstArgs === "b" || firstArgs === "bc") {
             //if there are second ares
             if(args[1]) {
@@ -88,18 +91,21 @@ exports.run = (client, message, args, p) => {
                 "color": 16399236
             }});
             return;
+
+
+
         } else 
         //most of the code below this is just filling some functions that are below all of this so I'm not going to document it
         if(firstArgs === "profile" || firstArgs === "p") {
-            profile(cfg.banchoProfileApi, cfg.banchoAviUrl, cfg.banchoPUrl, args, message, client, 1, "bancho");
+            osu.get.profile(cfg.banchoProfileApi, cfg.banchoAviUrl, cfg.banchoPUrl, args, message, client, 1, "bancho");
             return;
         } else
         if(firstArgs === "top" || firstArgs === "t") {
-            top(cfg.banchoProfileApi, cfg.banchoTopApi, cfg.banchoPUrl, client, message, args, 1, "bancho");
+            osu.get.top(cfg.banchoProfileApi, cfg.banchoTopApi, cfg.banchoPUrl, client, message, args, 1, "bancho");
             return;
         } else
         if(firstArgs === "recent" || firstArgs === "r" || firstArgs === "l" || firstArgs === "last") {
-            last(client, message, args, 1, cfg.banchoRecentApi, cfg.banchoProfileApi, "bancho", "https://a.ppy.sh/");
+            osu.get.last(client, message, args, 1, cfg.banchoRecentApi, cfg.banchoProfileApi, "bancho", "https://a.ppy.sh/");
             return;
         } else
         //the private server commands are all the same and easy to understand so yea just read through them i wont document them
@@ -111,24 +117,25 @@ exports.run = (client, message, args, p) => {
             let aviUrl = cfg.akatsukiAviUrl;
             let nameIndex = 2;
             let server = "akatsuki";
-
-            if(args[1]) {
-                let secondArgs = args[1];
-
+            let argIndex = 1;
+        
+            if(args[argIndex]) {
+                let secondArgs = args[argIndex];
+        
                 if(secondArgs === "profile" || secondArgs === "p") {
-                    profile(pApi, aviUrl, pUrl, args, message, client, nameIndex, server);
+                    osu.get.profile(pApi, aviUrl, pUrl, args, message, client, nameIndex, server);
                     return;
                 } else
                 if(secondArgs === "top" || secondArgs === "t") {
-                    top(pApi, tApi, pUrl, client, message, args, nameIndex, server);
+                    osu.get.top(pApi, tApi, pUrl, client, message, args, nameIndex, server);
                     return;
                 } else
                 if(secondArgs === "last" || secondArgs === "l" || secondArgs === "r" || secondArgs === "recent") {
-                    last(client, message, args, nameIndex, rApi, pApi, server, aviUrl);
+                    osu.get.last(client, message, args, nameIndex, rApi, pApi, server, aviUrl);
                     return;
                 }
             }
-            sendPrivServerHelp(message, "Akatsuki", p);
+            osu.send.help(message, "Akatsuki", p);
             return;
         } else
         if(firstArgs === "ripple" || firstArgs === "ri") {
@@ -139,24 +146,25 @@ exports.run = (client, message, args, p) => {
             let aviUrl = cfg.rippleAviUrl;
             let nameIndex = 2;
             let server = "ripple";
-
-            if(args[1]) {
-                let secondArgs = args[1];
-
+            let argIndex = 1;
+        
+            if(args[argIndex]) {
+                let secondArgs = args[argIndex];
+        
                 if(secondArgs === "profile" || secondArgs === "p") {
-                    profile(pApi, aviUrl, pUrl, args, message, client, nameIndex, server);
+                    osu.get.profile(pApi, aviUrl, pUrl, args, message, client, nameIndex, server);
                     return;
                 } else
                 if(secondArgs === "top" || secondArgs === "t") {
-                    top(pApi, tApi, pUrl, client, message, args, nameIndex, server);
+                    osu.get.top(pApi, tApi, pUrl, client, message, args, nameIndex, server);
                     return;
                 } else
                 if(secondArgs === "last" || secondArgs === "l" || secondArgs === "r" || secondArgs === "recent") {
-                    last(client, message, args, nameIndex, rApi, pApi, server, aviUrl);
+                    osu.get.last(client, message, args, nameIndex, rApi, pApi, server, aviUrl);
                     return;
                 }
             }
-            sendPrivServerHelp(message, "Ripple", p);
+            osu.send.help(message, "Ripple", p);
             return;
         } else
         if(firstArgs === "kurikku" || firstArgs === "ku") {
@@ -167,24 +175,25 @@ exports.run = (client, message, args, p) => {
             let aviUrl = cfg.kurikkuAviUrl;
             let nameIndex = 2;
             let server = "kurikku";
-
-            if(args[1]) {
-                let secondArgs = args[1];
-
+            let argIndex = 1;
+        
+            if(args[argIndex]) {
+                let secondArgs = args[argIndex];
+        
                 if(secondArgs === "profile" || secondArgs === "p") {
-                    profile(pApi, aviUrl, pUrl, args, message, client, nameIndex, server);
+                    osu.get.profile(pApi, aviUrl, pUrl, args, message, client, nameIndex, server);
                     return;
                 } else
                 if(secondArgs === "top" || secondArgs === "t") {
-                    top(pApi, tApi, pUrl, client, message, args, nameIndex, server);
+                    osu.get.top(pApi, tApi, pUrl, client, message, args, nameIndex, server);
                     return;
                 } else
                 if(secondArgs === "last" || secondArgs === "l" || secondArgs === "r" || secondArgs === "recent") {
-                    last(client, message, args, nameIndex, rApi, pApi, server, aviUrl);
+                    osu.get.last(client, message, args, nameIndex, rApi, pApi, server, aviUrl);
                     return;
                 }
             }
-            sendPrivServerHelp(message, "Kurikku", p);
+            osu.send.help(message, "Kurikku", p);
             return;
         } else
         if(firstArgs === "enshi" || firstArgs === "es") {
@@ -195,24 +204,25 @@ exports.run = (client, message, args, p) => {
             let aviUrl = cfg.enshiAviUrl;
             let nameIndex = 2;
             let server = "enshi";
-
-            if(args[1]) {
-                let secondArgs = args[1];
-
+            let argIndex = 1;
+        
+            if(args[argIndex]) {
+                let secondArgs = args[argIndex];
+        
                 if(secondArgs === "profile" || secondArgs === "p") {
-                    profile(pApi, aviUrl, pUrl, args, message, client, nameIndex, server);
+                    osu.get.profile(pApi, aviUrl, pUrl, args, message, client, nameIndex, server);
                     return;
                 } else
                 if(secondArgs === "top" || secondArgs === "t") {
-                    top(pApi, tApi, pUrl, client, message, args, nameIndex, server);
+                    osu.get.top(pApi, tApi, pUrl, client, message, args, nameIndex, server);
                     return;
                 } else
                 if(secondArgs === "last" || secondArgs === "l" || secondArgs === "r" || secondArgs === "recent") {
-                    last(client, message, args, nameIndex, rApi, pApi, server, aviUrl);
+                    osu.get.last(client, message, args, nameIndex, rApi, pApi, server, aviUrl);
                     return;
                 }
             }
-            sendPrivServerHelp(message, "Enshi", p);
+            osu.send.help(message, "Enshi", p);
             return;
         } else 
         if(firstArgs === "enjuu" || firstArgs === "ej") {
@@ -223,24 +233,25 @@ exports.run = (client, message, args, p) => {
             let aviUrl = cfg.enjuuAviUrl;
             let nameIndex = 2;
             let server = "enjuu";
-
-            if(args[1]) {
-                let secondArgs = args[1];
-
+            let argIndex = 1;
+        
+            if(args[argIndex]) {
+                let secondArgs = args[argIndex];
+        
                 if(secondArgs === "profile" || secondArgs === "p") {
-                    profile(pApi, aviUrl, pUrl, args, message, client, nameIndex, server);
+                    osu.get.profile(pApi, aviUrl, pUrl, args, message, client, nameIndex, server);
                     return;
                 } else
                 if(secondArgs === "top" || secondArgs === "t") {
-                    top(pApi, tApi, pUrl, client, message, args, nameIndex, server);
+                    osu.get.top(pApi, tApi, pUrl, client, message, args, nameIndex, server);
                     return;
                 } else
                 if(secondArgs === "last" || secondArgs === "l" || secondArgs === "r" || secondArgs === "recent") {
-                    last(client, message, args, nameIndex, rApi, pApi, server, aviUrl);
+                    osu.get.last(client, message, args, nameIndex, rApi, pApi, server, aviUrl);
                     return;
                 }
             }
-            sendPrivServerHelp(message, "Enjuu", p);
+            osu.send.help(message, "Enjuu", p);
             return;
         } else
         if(firstArgs === "kawata" || firstArgs === "ka") {
@@ -251,24 +262,25 @@ exports.run = (client, message, args, p) => {
             let aviUrl = cfg.kawataAviUrl;
             let nameIndex = 2;
             let server = "kawata";
-
-            if(args[1]) {
-                let secondArgs = args[1];
-
+            let argIndex = 1;
+        
+            if(args[argIndex]) {
+                let secondArgs = args[argIndex];
+        
                 if(secondArgs === "profile" || secondArgs === "p") {
-                    profile(pApi, aviUrl, pUrl, args, message, client, nameIndex, server);
+                    osu.get.profile(pApi, aviUrl, pUrl, args, message, client, nameIndex, server);
                     return;
                 } else
                 if(secondArgs === "top" || secondArgs === "t") {
-                    top(pApi, tApi, pUrl, client, message, args, nameIndex, server);
+                    osu.get.top(pApi, tApi, pUrl, client, message, args, nameIndex, server);
                     return;
                 } else
                 if(secondArgs === "last" || secondArgs === "l" || secondArgs === "r" || secondArgs === "recent") {
-                    last(client, message, args, nameIndex, rApi, pApi, server, aviUrl);
+                    osu.get.last(client, message, args, nameIndex, rApi, pApi, server, aviUrl);
                     return;
                 }
             }
-            sendPrivServerHelp(message, "Kawata", p);
+            osu.send.help(message, "Kawata", p);
             return;
         } else
         /*below are the gatari things before i get into them i wanted to say
@@ -578,6 +590,7 @@ exports.run = (client, message, args, p) => {
             }});
             return;
         } else
+        //todo rewrite maps
         if(firstArgs === "maps" || firstArgs === "m") {
             let username;
             //if someone entered a username
@@ -712,293 +725,212 @@ exports.run = (client, message, args, p) => {
                 });
             });
         return;
+        } else
+        if(firstArgs === "beatconnect") {
+            let mapQuery;
+            //if someone entered a map
+            if(args[1]) {
+                mapQuery = args.slice(1).join(" ");
+            } else
+            //else if there is nothing entered return
+            if(!args[0]) return message.channel.send("Please enter a map I should look for");
+            //if the pQuery includes ping stuff return
+            if(mapQuery.includes("@everyone")) return message.channel.send("Please don't try to abuse the top command by pinging everyone");
+            if(mapQuery.includes("@here")) return message.channel.send("Please don't try to abuse the top command by pinging everyone");
+            //if the search includes -s we split that and replace it with &s= and put all to lower case
+            if(mapQuery.includes("-s")) {
+              mapQuery = mapQuery.split(" -s ").join("&s=").toLowerCase();
+            }
+            //put the maps together
+            let maps = `${cfg.beatconnectSearchApi}${cfg.beatconnectToken}&q=${mapQuery}`;
+            //if the executor did -s then cut that from the search
+            if(mapQuery.includes("&s=")) {
+              mapQuery = mapQuery.substring(0, mapQuery.indexOf('&'));
+            }
+            //request the maps
+            client.snekfetch.get(maps).then((r) => {
+              let rawBody = r.body;
+              //if you want to search by last updated
+              /*let body = client._.sortBy(rawBody, function(o) { 
+                  return o.last_updated; 
+              }).reverse();*/
+              
+              //NOTICE FOR MYSELF: ADD RANDOM AND OTHER OWN ORDER FUNCTIONS TO THIS 
+              
+              let body = rawBody;
+        
+              //if no maps return
+              if(!body.beatmaps[0]) return message.channel.send(`I couldn't find any maps under ${mapQuery}`);
+              //set all maps to first map cause we know we that
+              let map1 = body.beatmaps[0].id;
+              let uniqueID1 = body.beatmaps[0].unique_id;
+              let map2 = map1;
+              let uniqueID2 = uniqueID1;
+              let map3 = map1;
+              let uniqueID3 = uniqueID1;
+              let map4 = map1;
+              let uniqueID4 = uniqueID1;
+              //check if all the maps exist and if so change the variables
+              if(body.beatmaps[1]) {
+                map2 = body.beatmaps[1].id;
+                uniqueID2 = body.beatmaps[1].unique_id;
+                if(body.beatmaps[2]) {
+                  map3 = body.beatmaps[2].id;
+                  uniqueID3 = body.beatmaps[2].unique_id;
+                  if(body.beatmaps[3]) {
+                    map4 = body.beatmaps[3].id;
+                    uniqueID4 = body.beatmaps[3].unique_id;
+                  }
+                }
+              }
+        
+              //now we put the map set ids together with the bancho map set url
+              let mapAPI1 = cfg.banchoSetApi + map1;
+              let mapAPI2 = cfg.banchoSetApi + map2;
+              let mapAPI3 = cfg.banchoSetApi + map3;
+              let mapAPI4 = cfg.banchoSetApi + map4;
+              //then we request the maps
+              client.snekfetch.get(mapAPI1).then((r) => {
+                  let mapn1 = r.body;
+                  client.snekfetch.get(mapAPI2).then((r) => {
+                      let mapn2 = r.body;
+                      client.snekfetch.get(mapAPI3).then((r) => {
+                          let mapn3 = r.body;
+                          client.snekfetch.get(mapAPI4).then((r) => {
+                              let mapn4 = r.body;
+                              //if one of the maps isn't available on bancho return cause we need info from there
+                              if(!mapn1[0] || !mapn2[0] || !mapn3[0] || !mapn4[0]) return message.channel.send("One of the maps I was looking for is deleted on bancho!");
+                              //we convert the status (numbers) to a readable string
+                              let status1 = getStatus(mapn1);
+                              let status2 = getStatus(mapn2);
+                              let status3 = getStatus(mapn3);
+                              let status4 = getStatus(mapn4);
+                              //we convert the difficulties to emojis
+                              let diffIcons1 = diffInIcon(mapn1);
+                              let diffIcons2 = diffInIcon(mapn2);
+                              let diffIcons3 = diffInIcon(mapn3);
+                              let diffIcons4 = diffInIcon(mapn4);
+                              //the favourites
+                              let favs1 = favourites(mapn1[0].favourite_count);
+                              let favs2 = favourites(mapn2[0].favourite_count);
+                              let favs3 = favourites(mapn3[0].favourite_count);
+                              let favs4 = favourites(mapn4[0].favourite_count);
+        
+                              //get the nominations & hypes then put favs noms and hypes together
+                              let noms1 = nominations(body.beatmaps[0].nominations_current);
+                              let hypes1 = hypes(body.beatmaps[0].hype_current);
+                              let fNH1 = `${favs1}${noms1}${hypes1}`;
+        
+                              //first field
+                              let field1 = {
+                                "name": `${mapn1[0].artist} - ${mapn1[0].title}`,
+                                "value": `${diffIcons1}\nStatus: ${status1}\nMapper: ${body.beatmaps[0].creator}\n${fNH1}\n[Map](https://osu.ppy.sh/beatmapsets/${map1}) | [Download](http://beatconnect.io/b/${map1}/${uniqueID1})`,
+                                "inline": false
+                              };
+                              //we leave the other fields blank for now
+                              let field2 = {
+                                "name": "",
+                                "value": ""
+                              };
+                              let field3 = {
+                                "name": "",
+                                "value": ""
+                              };
+                              let field4 = {
+                                "name": "",
+                                "value": ""
+                              };
+                              
+                              //if the fourth map isn't the same as the first then it exists
+                              if(map4 !== map1) {
+                                //get noms & hypes and put everything together
+                                let noms4 = nominations(body.beatmaps[3].nominations_current);
+                                let hypes4 = hypes(body.beatmaps[3].hype_current);
+                                let fNH4 = `${favs4}${noms4}${hypes4}`;
+                                //make the field
+                                field4 = {
+                                  "name": `${mapn4[0].artist} - ${mapn4[0].title}`,
+                                  "value": `${diffIcons4}\nStatus: ${status4}\nMapper: ${body.beatmaps[3].creator}\n${fNH4}\n[Map](https://osu.ppy.sh/beatmapsets/${map4}) | [Download](http://beatconnect.io/b/${map4}/${uniqueID4})`,
+                                  "inline": false
+                                };
+                              }
+                              //same as the fourth map
+                              if(map3 !== map1) {
+                                let noms3 = nominations(body.beatmaps[2].nominations_current);
+                                let hypes3 = hypes(body.beatmaps[2].hype_current);
+                                let fNH3 = `${favs3}${noms3}${hypes3}`;
+                                field3 = {
+                                  "name": `${mapn3[0].artist} - ${mapn3[0].title}`,
+                                  "value": `${diffIcons3}\nStatus: ${status3}\nMapper: ${body.beatmaps[2].creator}\n${fNH3}\n[Map](https://osu.ppy.sh/beatmapsets/${map3}) | [Download](http://beatconnect.io/b/${map3}/${uniqueID3})`,
+                                  "inline": false
+                                };
+                              }
+                              //same as the fourth map
+                              if(map2 !== map1) {
+                                let noms2 = nominations(body.beatmaps[1].nominations_current);
+                                let hypes2 = hypes(body.beatmaps[1].hype_current);
+                                let fNH2 = `${favs2}${noms2}${hypes2}`;
+                                field2 = {
+                                  "name": `${mapn2[0].artist} - ${mapn2[0].title}`,
+                                  "value": `${diffIcons2}\nStatus: ${status2}\nMapper: ${body.beatmaps[1].creator}\n${fNH2}\n[Map](https://osu.ppy.sh/beatmapsets/${map2}) | [Download](http://beatconnect.io/b/${map2}/${uniqueID2})`,
+                                  "inline": false
+                                };
+                              }
+                              //fields are for now just the first one
+                              let fields = [
+                                field1
+                              ];
+                              //if the fourth map isn't the same as the first then all maps exist
+                              if(map4 !== map1) {
+                                fields = [
+                                  field1,
+                                  field2,
+                                  field3,
+                                  field4
+                                ];
+                              } else
+                              //pretty much the same as the fourth one
+                              if(map3 !== map1) {
+                                fields = [
+                                  field1,
+                                  field2,
+                                  field3
+                                ];
+                              } else
+                              //again
+                              if(map2 !== map1) {
+                                fields = [
+                                  field1,
+                                  field2
+                                ];
+                              }
+                              //now we send the map(s)
+                              message.channel.send({
+                                "embed": {
+                                "title": `Maps with the query: \`${mapQuery}\``,
+                                "url": `http://beatconnect.io`,
+                                "color": 16399236,
+                                "fields": fields}}); 
+                          });
+                      });
+                  });
+              });
+          });
+          return;
+        } else
+        if(firstArgs === "compare" || firstArgs === 'c') {
+            osu.get.compare(client, message, args, 1, cfg.banchoProfileApi, cfg.banchoUserScoresApi, cfg.banchoMapApi, cfg.banchoAviUrl);
         }
     }
     //if no args send help
     message.channel.send({"embed": {
-        "description": "**osu!:** \n\n**bancho:**\n\nprofile (p) <name>: ``sends a bancho profile card``\ntop (t) <name>: ``sends top plays of entered user``\nlast (l) <name>: ``sends recent plays of entered user``\nmaps (m) <name>: ``lists newest maps of entered user``\n\n**private servers:**\n\nakatsuki (a): ``for akatsuki related commands``\nripple (ri): ``for ripple related commands``\ngatari (g):``for gatari related commands``\nkurikku (ku):``for kurikku related commands``\nenshi (es):``for enshi related commands``\nenjuu (ej):``for enjuu related commands``\nkawata (ka):``for kawata related commands``\n\n**other:**\n\nbloodcat (bc): ``for bloodcat related commands``\nset (s) <server> <name>: ``sets your default name for selected server``\nname (n): ``lists your default names for the osu servers``\n\n**help:**\n\nusage: " + p + "osu <command>\n\naliases are in ()\nparameters are in <>\nnotice: you can just do $servername/bancho command",
+        "description": "**osu!:** \n\n**bancho:**\n\nprofile (p) <name>: ``sends a bancho profile card``\ntop (t) <name>: ``sends top plays of entered user``\nlast (l) <name>: ``sends recent plays of entered user``\nmaps (m) <name>: ``lists newest maps of entered user``\ncompare (c) <name>: ``compare your scores on the maps your friends recently got scores on``\n\n**private servers:**\n\nakatsuki (a): ``for akatsuki related commands``\nripple (ri): ``for ripple related commands``\ngatari (g): ``for gatari related commands``\nkurikku (ku): ``for kurikku related commands``\nenshi (es): ``for enshi related commands``\nenjuu (ej): ``for enjuu related commands``\nkawata (ka): ``for kawata related commands``\n\n**other:**\n\nbeatconnect <query>: ``search for maps on beatconnect.io``\nbloodcat (bc): ``for bloodcat related commands``\nset (s) <server> <name>: ``sets your default name for selected server``\nname (n): ``lists your default names for the osu servers``\n\n**help:**\n\nusage: " + p + "osu <command>\n\naliases are in ()\nparameters are in <>",
         "color": 16399236
     }});
 }
 
 //functions to make the code work below:
 
-//get the profile
-function profile(pAPI, aviUrl, pUrl, args, message, client, nameIndex, server) {
-    let username;
-    //if someone enters a name
-    if(args[nameIndex]) {
-        //then the name is everything from the nameIndex
-        username = args.slice(nameIndex).join(" ");
-    } else
-    //if no username entered
-    if(!args[nameIndex]) {
-        //then get the default username from the database
-        username = client.osuNames.get(message.author.id, server);
-    }
-    //if the user hasn't changed their username then return
-    if(username === '-') return message.channel.send("Please enter a user");
-    //anti ping stuff
-    if(username.includes("@everyone")) return message.channel.send("Please don't try to abuse the profile command by pinging everyone");
-    if(username.includes("@here")) return message.channel.send("Please don't try to abuse the profile command by pinging everyone");
-
-    //profile api plus username spaces are switched with %20
-    let profile = pAPI + username.split(' ').join('%20');
-    /*this line is unneeded cause we already check if it's no username added but just in 
-    case that the database has no name or someone finds an exploit ill keep this*/
-    if(!username) return message.channel.send("Please enter a user!");
-    //request the profile api 
-    client.snekfetch.get(profile).then((r) => {
-        let body = r.body;
-        //if no result return
-        if(!body[0]) return message.channel.send("I couldn't find " + username);
-        let bodyname = body[0].username;
-        let bodygrank = body[0].pp_rank;
-        let bodycrank = body[0].pp_country_rank;
-        let bodycountry = body[0].country;
-        let bodyid = body[0].user_id;
-        let bodypp = parseInt(body[0].pp_raw);
-        let bodyacc = body[0].accuracy;
-        let bodyplaycount = body[0].playcount;
-        let bodylevel = parseInt(body[0].level);
-        //send profile embed in channel
-        message.channel.send({"embed": {
-            "title": `Name: ${bodyname}`,
-            "description": `**PP:** ${bodypp}pp
-**Accuracy:** ${bodyacc.substring(0, 5)}%
-**Global Rank:** #${bodygrank}
-**Country Rank:** #${bodycrank} (${bodycountry})
-**Level**: ${bodylevel} | **Playcount**: ${bodyplaycount}`,
-            "url": `${pUrl}${bodyid}`,
-            "color": 16399236,
-            "thumbnail": {
-              "url": `${aviUrl}${bodyid}`
-            }
-        }});
-    });
-    return;
-}
-
-//get the top plays
-function top(pAPI, tAPI, pUrl, client, message, args, nameIndex, server) {
-    let username;
-    //if a username was entered
-    if(args[nameIndex]) {
-        //username is everything from nameIndex
-        username = args.slice(nameIndex).join(" ");
-    } else
-    //if no username entered
-    if(!args[nameIndex]) {
-        //get the username from the database
-        username = client.osuNames.get(message.author.id, server);
-    }
-    //if the user left the name on default return
-    if(username === '-') return message.channel.send("Please enter a user");
-    //anti ping stuff
-    if(username.includes("@everyone")) return message.channel.send("Please don't try to abuse the top command by pinging everyone");
-    if(username.includes("@here")) return message.channel.send("Please don't try to abuse the top command by pinging everyone");
-    //if someone tries to request other modes return i havent supported the pp calculation for them yet
-    if(username.includes("&m=")) return message.channel.send("I'm sorry but the bot doesn't support any other modes than standard");
-    //the apis
-    let top = tAPI + username.split(' ').join('%20');
-    let profile = pAPI + username.split(' ').join('%20');
-    let mapAPI = client.config.banchoMapApi;
-    //I explained this in the profile already
-    if(!username) return message.channel.send("Please enter a user!");
-    //request the profile
-    client.snekfetch.get(profile).then((r) => {
-        let bodyp = r.body;
-        //request the top plays
-        client.snekfetch.get(top).then((a) => {
-            let bodyt = a.body;
-            //if no profile or top plays return
-            if(!bodyt[0] || !bodyp[0]) return message.channel.send("I either couldn't find this user or they didn't have any top plays");
-            let mapn1 =  mapAPI + bodyt[0].beatmap_id;
-            //request first map
-            client.snekfetch.get(mapn1).then((m1) => {
-                let map1 = m1.body;
-                if(!bodyt[1]) return message.channel.send("I either couldn't find this user or they didn't have enough top plays");
-                let mapn2 = mapAPI + bodyt[1].beatmap_id;
-                //request second map
-                client.snekfetch.get(mapn2).then((m2) => {
-                    let map2 = m2.body;
-                    if(!bodyt[2]) return message.channel.send("I either couldn't find this user or they didn't have enough top plays");
-                    let mapn3 = mapAPI + bodyt[2].beatmap_id;
-                    //request third map
-                    client.snekfetch.get(mapn3).then((m3) => {
-                        let map3 = m3.body;
-                        let pname = bodyp[0].username;
-                        let purl = pUrl + bodyp[0].user_id;
-
-                        let rank1;
-                        let rank2;
-                        let rank3;
-                        
-                        //turn the grades to discord emojis
-
-                        rank1 = rankToEmoji(bodyt, 0, client);
-                        rank2 = rankToEmoji(bodyt, 1, client);
-                        rank3 = rankToEmoji(bodyt, 2, client);
-
-                        //calculate the accuracy & mods
-
-                        let accn1 = accCalculation(bodyt, 0);
-                        let acc1 = accCalculation(bodyt, 0).toString().substring(0, 5);
-                        let mods1 = modCalculation(client, bodyt, 0);
-                        let rawMods1 = bodyt[0].enabled_mods;
-
-                        let accn2 = accCalculation(bodyt, 1);
-                        let acc2 = accCalculation(bodyt, 1).toString().substring(0, 5);
-                        let mods2 = modCalculation(client, bodyt, 1);
-                        let rawMods2 = bodyt[1].enabled_mods;
-
-                        let accn3 = accCalculation(bodyt, 2);
-                        let acc3 = accCalculation(bodyt, 2).toString().substring(0, 5);
-                        let mods3 = modCalculation(client, bodyt, 2);
-                        let rawMods3 = bodyt[2].enabled_mods;
-                        //request the html of the first map
-                        client.request('http://osu.ppy.sh/osu/' + map1[0].beatmap_id, (error, response, body1) => {
-                            //calculate if fc pp and star rating
-                            let ifFCPP1 = ifFCPPCalculation(rawMods1, client, bodyt, 0, map1, body1, accn1);
-                            let stars1 = srCalculation(rawMods1, body1, client);
-                            //request the html of the second map
-                            client.request('http://osu.ppy.sh/osu/' + map2[0].beatmap_id, (error, response, body2) => {
-                                //calculate if fc pp and star rating
-                                let ifFCPP2 = ifFCPPCalculation(rawMods2, client, bodyt, 1, map2, body2, accn2);
-                                let stars2 = srCalculation(rawMods2, body2, client);
-                                //request the html of the last map
-                                client.request('http://osu.ppy.sh/osu/' + map3[0].beatmap_id, (error, response, body3) => {
-                                    //calculate if fc pp and star rating
-                                    let ifFCPP3 = ifFCPPCalculation(rawMods3, client, bodyt, 2, map3, body3, accn3);
-                                    let stars3 = srCalculation(rawMods3, body3, client);
-
-                                    //put everything together for the map title
-
-                                    let m1t = `${map1[0].artist} - ${map1[0].title} [${map1[0].version}] (${stars1}*)`;
-                                    let m2t = `${map2[0].artist} - ${map2[0].title} [${map2[0].version}] (${stars2}*)`;
-                                    let m3t = `${map3[0].artist} - ${map3[0].title} [${map3[0].version}] (${stars3}*)`;
-
-                                    //put everything together for the map description
-
-                                    let m1d = `PP: ${parseInt(bodyt[0].pp)}pp ${ifFCPP1}\nAccuracy: ${acc1}% (${bodyt[0].count300}/${bodyt[0].count100}/${bodyt[0].count50}/${bodyt[0].countmiss})\nCombo: ${bodyt[0].maxcombo}x / ${map1[0].max_combo}x\n${mods1}Grade:  ${rank1}\nMapper: ${map1[0].creator} | [Download](https://osu.ppy.sh/beatmapsets/${map1[0].beatmapset_id}/download)`
-                                    let m2d = `PP: ${parseInt(bodyt[1].pp)}pp ${ifFCPP2}\nAccuracy: ${acc2}% (${bodyt[1].count300}/${bodyt[1].count100}/${bodyt[1].count50}/${bodyt[1].countmiss})\nCombo: ${bodyt[1].maxcombo}x / ${map2[0].max_combo}x\n${mods2}Grade:  ${rank2}\nMapper: ${map2[0].creator} | [Download](https://osu.ppy.sh/beatmapsets/${map2[0].beatmapset_id}/download)`
-                                    let m3d = `PP: ${parseInt(bodyt[2].pp)}pp ${ifFCPP3}\nAccuracy: ${acc3}% (${bodyt[2].count300}/${bodyt[2].count100}/${bodyt[2].count50}/${bodyt[2].countmiss})\nCombo: ${bodyt[2].maxcombo}x / ${map3[0].max_combo}x\n${mods3}Grade:  ${rank3}\nMapper: ${map3[0].creator} | [Download](https://osu.ppy.sh/beatmapsets/${map3[0].beatmapset_id}/download)`
-                                    
-                                    //send the top plays of entered user
-
-                                    message.channel.send({ "embed": {
-                                    "title": `Top plays from: ${pname}`,
-                                    "url": purl,
-                                    "color": 16399236,
-                                    "fields": [
-                                        {
-                                        "name": m1t,
-                                        "value": m1d
-                                        },
-                                        {
-                                        "name": m2t,
-                                        "value": m2d
-                                        },
-                                        {
-                                        "name": m3t,
-                                        "value": m3d
-                                    }]}});
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-        });
-    });
-    return;
-}
-
-//get last plays
-function last(client, message, args, nameIndex, rAPI, pAPI, server, aviUrl) {
-    let username;
-    //if a user is entered
-    if(args[nameIndex]) {
-        //username is everything from the nameIndex and after that
-        username = args.slice(nameIndex).join(" ");
-    } else
-    //if no username is entered
-    if(!args[nameIndex]) {
-        //get the default username from the database
-        username = client.osuNames.get(message.author.id, server);
-    }
-    //if the user didn't change their name return
-    if(username === '-') return message.channel.send("Please enter a user");
-    //anti ping stuff
-    if(username.includes("@everyone")) return message.channel.send("Please don't try to abuse the recent command by pinging everyone");
-    if(username.includes("@here")) return message.channel.send("Please don't try to abuse the recent command by pinging everyone");
-    //if someone tries to request other modes i explained this in the top command
-    if(username.includes("&m=")) return message.channel.send("I'm sorry but the bot doesn't support any other modes than standard");
-
-    //apis
-    let recent = rAPI + username.split(' ').join('%20');
-    let profile = pAPI + username.split(' ').join('%20');
-    let mapAPI = client.config.banchoMapApi;
-
-    //i explained this in the profile function
-    if(!username) return message.channel.send("Please enter a user!");
-    //request the profile
-    client.snekfetch.get(profile).then((r) => {
-        let bodyp = r.body;
-        //request the recent plays
-        client.snekfetch.get(recent).then((a) => {
-            let bodyr = a.body;
-            //if no profile
-            if(!bodyp[0]) return message.channel.send("I couldn't find " + username);
-            let pname = bodyp[0].username;
-            //if no recent plays
-            if(!bodyr[0]) return message.channel.send(pname + " doesn't have any recent plays");
-            let mapn = mapAPI + bodyr[0].beatmap_id;
-            //request the most recent map
-            client.snekfetch.get(mapn).then((m) => {
-                let map = m.body;  
-
-                //grades to discord emojis
-                let rank = rankToEmoji(bodyr, 0, client);
-                //calculate acc
-                let accn = accCalculation(bodyr, 0);
-                let acc = accCalculation(bodyr, 0).toString().substring(0, 5);
-                //calculate which mods are with bitwise blabla look in that function for more documentation
-                let mods = modCalculation(client, bodyr, 0);
-                let rawMods = bodyr[0].enabled_mods;
-
-                //request the html of the most recent map
-                client.request('http://osu.ppy.sh/osu/' + bodyr[0].beatmap_id, (error, response, body) => {
-                    //calculate if fc pp
-                    let ifFCPP = ifFCPPCalculation(rawMods, client, bodyr, 0, map, body, accn);
-                    //calculate star rating
-                    let stars = srCalculation(rawMods, body, client);
-                    //calculate pp
-                    let pp = ppCalculation(rawMods, accn, body, bodyr, 0, client);
-                    //put the map title together
-                    let mt = `${map[0].artist} - ${map[0].title} [${map[0].version}] (${stars}*)`;
-                    //put the description together
-                    let md = `PP: ${pp}pp ${ifFCPP}\nAccuracy: ${acc}% (${bodyr[0].count300}/${bodyr[0].count100}/${bodyr[0].count50}/${bodyr[0].countmiss})\nCombo: ${bodyr[0].maxcombo}x / ${map[0].max_combo}x\n${mods}Grade:  ${rank}\nMapper: ${map[0].creator} | [Download](https://osu.ppy.sh/beatmapsets/${map[0].beatmapset_id}/download)`;
-                    //send most recent play of entered user
-                    message.channel.send({ "embed": {
-                        "color": 16399236,
-                        "footer": {
-                            "icon_url": `${aviUrl}${bodyp[0].user_id}`,
-                            "text": `Recent play from: ${pname}`
-                        },
-                        "thumbnail": {
-                            "url": "https://b.ppy.sh/thumb/" + map[0].beatmapset_id + ".jpg"
-                        },
-                        "fields": [{
-                            "name": mt,
-                            "value": md
-                    }]}});
-                });
-            });
-        });
-    });
-    return;
-}
 //function to turn status= in the appropriate url stuff for bloodcat
 function mapNameCutter(name) {
     name = name.split(' ').join('%20')
@@ -1016,42 +948,9 @@ function mapNameCutter(name) {
     
     return name; 
 }
-//turn the ranks to discord emojis
-function rankToEmoji(body, bodyIndex, client) {
-    let rank;
-    //should be fairly self explaining
-    if(body[bodyIndex].rank === 'X') {
-        rank = client.config.osuX;
-    } else
-    if(body[bodyIndex].rank === 'XH') {
-        rank = client.config.osuXH;
-    }
-    if(body[bodyIndex].rank === 'S') {
-        rank = client.config.osuS;
-    } else
-    if(body[bodyIndex].rank === 'SH') {
-        rank = client.config.osuSH;
-    } else
-    if(body[bodyIndex].rank === 'A') {
-        rank = client.config.osuA;
-    } else
-    if(body[bodyIndex].rank === 'B') {
-        rank = client.config.osuB;
-    } else
-    if(body[bodyIndex].rank === 'C') {
-        rank = client.config.osuC;
-    } else
-    if(body[bodyIndex].rank === 'D') {
-        rank = client.config.osuF;
-    } else
-    if(body[bodyIndex].rank === 'F') {
-        rank = client.config.osuF;
-    }
-    return rank;
-}
 
 //I hate gatari so much 
-//same thing as above just for gatari cause they are special ed kids
+//just for gatari cause they are special ed kids
 function rankToEmojiGatariEdition(body, bodyIndex, client) {
     let ranking;
     if(body[bodyIndex].ranking === 'X') {
@@ -1082,31 +981,6 @@ function rankToEmojiGatariEdition(body, bodyIndex, client) {
         ranking = client.config.osuF;
     }
     return ranking;
-}
-//calculate the accuracy (yes)
-function accCalculation(body, bodyIndex) {
-    let acc300s = parseFloat(body[bodyIndex].count300);
-    let acc100s = parseFloat(body[bodyIndex].count100);
-    let acc50s = parseFloat(body[bodyIndex].count50);
-    let accmiss = parseFloat(body[bodyIndex].countmiss);
-    //((300s * 300 + 100s * 100 + 50s * 50 + miss)/(300s + 100s + 50s + miss) * 300)
-    let acc = ((acc300s * 300 + acc100s * 100 + acc50s * 50 + accmiss * 0)/((acc300s + acc100s + acc50s + accmiss) * 300) * 100);
-    return acc;
-}
-
-//calculate the mods cause that's needed yes i know
-function modCalculation(client, body, bodyIndex) {
-    //get the raw mods
-    let rawMods = body[bodyIndex].enabled_mods;
-    //set mods to no mod i made a config thing for it so that i dont have to change so much stuff
-    let mods = client.config.noMod;
-    //if mods is 0 then mods can stay no mod
-    if(rawMods > 0) {
-        /*calculate mods with nearest to the power of 2 stuff idk thanks for the people
-        that i worked for they helped me with this i can do maths so yea lOl*/
-        mods = nearestPow2(rawMods);
-    }
-    return mods;
 }
 
 //break the mods into pieces by getting the nearest power of 2 or some shit idk
@@ -1205,71 +1079,6 @@ function replaceIntWithMod(a) {
     }
 }
 
-//function to calculate pp
-function ppCalculation(mods, accn, requestBody, body, bodyIndex, client) {
-    let acc_percent = parseFloat(accn);
-    let combo = parseInt(body[bodyIndex].maxcombo);
-    let nmiss = parseInt(body[bodyIndex].countmiss);
-    //create a new parser
-    let parser = new client.ojs.parser().feed(requestBody);
-    //parse the map
-    let map = parser.map;
-    //calculate the star rating
-    let rawStars = new client.ojs.diff().calc({map: map, mods: mods});
-    //calculate the pp
-    let rawPP = client.ojs.ppv2({
-      stars: rawStars,
-      combo: combo,
-      nmiss: nmiss,
-      acc_percent: acc_percent,
-    });
-    //just take the total pp and fix it
-    let pp = rawPP.total.toFixed(2);
-    return pp;
-}
-
-//calculate the star rating
-function srCalculation(mods, requestBody, client) {
-    //create new parser
-    let parser = new client.ojs.parser().feed(requestBody);
-    //parse the map
-    let map = parser.map;
-    //calculate the star rating
-    let rawStars = new client.ojs.diff().calc({map: map, mods: mods});
-    //just take the total star rating and fix it
-    let stars = rawStars.total.toFixed(2);
-    return stars;
-}
-
-//calculate if fc pp 
-//this doesn't take the misses from the accuracy i didnt wanted to calculate accuracy again
-function ifFCPPCalculation(mods, client, body, bodyIndex, mapBody, requestBody, accn) {
-    //create new parser
-    let parser = new client.ojs.parser().feed(requestBody);
-    //parse the map
-    let map = parser.map;
-    //calculate star rating
-    let rawStars = new client.ojs.diff().calc({map: map, mods: mods});
-    //make empty variable if the player fced
-    let ifFCPP = "";
-    //if it isnt a fc
-    if(body[bodyIndex].maxcombo != mapBody[0].max_combo) {
-        let comboFC = parseInt(mapBody[0].max_combo);
-        let nmissFC = parseInt(0);
-        let acc_percent = parseFloat(accn);
-        //calculate if fc pp
-        fcPP = client.ojs.ppv2({
-            stars: rawStars,
-            combo: comboFC,
-            nmiss: nmissFC,
-            acc_percent: acc_percent,
-        });
-        //change the variable
-        ifFCPP = "=> " + fcPP.total.toFixed(2) + "pp";
-    }
-    return ifFCPP;
-}
-
 //change the status to a string
 function getStatus(mapn) {
     let status;
@@ -1343,12 +1152,32 @@ function bigLarryLover(a) {
     }
 }
 
-//send help message for the priv servers lOl
-function sendPrivServerHelp(message, server, p) {
-    message.channel.send({"embed": {
-        "description": "**" + server + ":** \n\nusage: " + p + "osu " + server +" <command>\n\nprofile <name>: ``sends a " + server + " profile card``\nlast <name>: ``sends recent plays of entered user``\ntop <name> ``sends top plays of entered user``\n\naliases: p, l, t",
-        "color": 16399236
-    }});
+function favourites(favs) {
+    let fav = "";
+    /*
+     * i commented this because it look stupid if nothing is there so
+     * i prefer if there is a 0 but if i feel like changing that i can
+     */
+    //if(favs != 0) {
+      fav = `${favs} :hearts:`;
+    //}
+    return fav;
+  }
+  
+function nominations(noms) {
+    let nom = "";
+    if(noms != 0) {
+        nom = ` ${noms} :thumbup: `;
+    }
+    return nom;
+}
+
+function hypes(hypes) {
+    let hype = "";
+    if(hypes != 0) {
+        hype = `${hypes} :mega:`;
+    }
+    return hype;
 }
 
 

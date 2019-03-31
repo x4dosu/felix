@@ -1,10 +1,6 @@
 exports.run = (client, message, args, p) => {
     //if not one of these people then return
-    if(
-        message.author.id !== client.config.ownerID &&
-        message.author.id !== '170288836067196928' &&
-        message.author.id !== '254373477878857729'
-    ) {
+    if(client.isSuperior) {
         return message.channel.send("You can't use this command :no_entry_sign:");
     }
     //if specialnsfw is true right now then

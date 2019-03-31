@@ -88,9 +88,12 @@ exports.run = (client, message, args, p) => {
                 //request last json
                 client.snekfetch.get(last).then((r) => {
                     let bodyr = r.body;
+
                     //if no last plays
                     if(!bodyr.scores[0]) return message.channel.send(tusername + " doesn't seem to have any recent plays");
                     let pname = bodyp.stats.username;
+
+                    client.lastMap.set(message.guild.id, bodyr.scores[0].beatmap.beatmap_id, "lastMap");
 
                     //replace the grade to emojis
                     let rank = rankToEmojiGatariEdition(bodyr.scores, 0, client);

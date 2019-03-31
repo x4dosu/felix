@@ -1,8 +1,11 @@
 module.exports = (client, message) => {
     //make sure the settings for the specified key are there and if not set them to the default
     client.database.ensure(message.guild.id, client.defaultSettings);
-    client.specialNSFW.ensure(message.author.id, {nsfw: false});
+    client.lastMap.ensure(message.guild.id, {lastMap: "-"});
+
     client.osuNames.ensure(message.author.id, client.osuConfig);
+    client.specialNSFW.ensure(message.author.id, {nsfw: false});
+    
     client.edaters.ensure(message.author.id, {partner: "-", edateDate: "-"});
     client.edateRequest.ensure(message.author.id, {request: "false", requester: "-"});
     client.sex.ensure(message.author.id, {virginity: true, pregnancy: false, consent: false});
@@ -106,11 +109,13 @@ module.exports = (client, message) => {
     if(command === "es") { command = "enshi"; }
     if(command === "ej") { command = "enjuu"; }
     if(command === "ka") { command = "kawata"; }
+    if(command === "c") { command = "compare"; }
     
     //check if is superior
     client.isSuperior = message.author.id != client.config.ownerID &&
     message.author.id != client.config.aaronID &&
-    message.author.id != client.config.badgraphicsID;
+    message.author.id != client.config.badgraphicsID &&
+    message.author.id != client.config.x4dID;
     
     //get the command
     const cmd = client.commands.get(command);
@@ -185,7 +190,7 @@ function edateDate() {
   let currentTime = new Date();
   let year = currentTime.getFullYear()
   let months = currentTime.getMonth();
-  let days = currentTime.getDay();
+  let days = currentTime.getDate();
   let hours = currentTime.getHours();
   let utcHours = currentTime.getUTCHours();
   let minutes = currentTime.getMinutes();

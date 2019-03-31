@@ -39,6 +39,8 @@ function last(client, message, args, nameIndex, rAPI, pAPI, server, aviUrl) {
             client.snekfetch.get(mapn).then((m) => {
                 let map = m.body;
 
+                client.lastMap.set(message.guild.id, bodyr[0].beatmap_id, "lastMap");
+
                 let rank = rankToEmoji(bodyr, 0, client);
 
                 let accn = accCalculation(bodyr, 0);

@@ -27,6 +27,10 @@ exports.run = (client, message, args, p) => {
                 "value": "thanks for helping me with\nthe undocumented gatari api",
             },
             {
+                "name": "**my honey bee dane**",
+                "value": "thank you for helping me\nwith the edate, epregnancy etc\ncommands and for impregnating me"
+            },  
+            {
                 "name": "**coletaku**",
                 "value": "thanks for cum on my face",
             },

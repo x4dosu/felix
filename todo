@@ -22,9 +22,9 @@
 
             4. rewrite bloodcat command when it's back
             5. show map completion & maybe tries
-            6. add compare command
-            7. add if less than four results to $osu maps 
+            6. add if less than four results to $osu maps 
             ^-//maybe even rewrite full command and make it more similar to the beatconnect cmd
+            ^^--////maybe even make it use the beatconnect api :thinking: the uniqueIDs are just lowkey yikes
 
             (config.js):
 
@@ -33,28 +33,18 @@
             (general things):
 
             1. fix [ws] [connection] Server closed the WebSocket connection: 1000
-            2. look for other todos I wrote down within the bot
-            3. add me command
-            4. add sleep and wake up command to count how long someone is sleeping //cool idea by badgraphics :3
-            5. improve my github wiki with a lot of documentation
-            6. add epregnancy to help
-            7. add kids database for every kid
+            2. add sleep and wake up command to count how long someone is sleeping //cool idea by badgraphics :3
+            3. improve my github wiki with a lot of documentation
+            4. add kids database for every kid
 
             (esex.js / message.js esex function)
 
             1. add esex counter
-            2. make it so that you dont have to ping your partner considering you can only esex them
 
-            (edate.js)
+            (osuFunctions.js)
 
-            1. add that you can just say a name instead of mention
-
-
+            1. document the shit
+            
             ideas for kids
 
             make database where i store all kids with the format nameuserid
-
-
-            ideas for compare
-
-            make database for the last map requested on the guild the command is executed where i save the beatmap id (not set) 

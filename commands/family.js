@@ -1,6 +1,8 @@
 exports.run = (client, message, args, p) => {
     if(message.mentions.users.first()) {
         let user = message.mentions.users.first().id;
+        client.edaters.ensure(user, {partner: "-", edateDate: "-"});
+        client.kids.ensure(user, {pregnancy: false, parent1: message.author.id, parent2: "-", kids: []});
         let partner = client.edaters.get(user, "partner");
         let userObject = client.users.get(user);
         let avatar = userObject.avatarURL;
@@ -16,7 +18,7 @@ exports.run = (client, message, args, p) => {
         }
         message.channel.send({
             "embed": {
-            "color": 14280797,
+            "color": 9584614,
             "thumbnail": {
                 "url": avatar
             },
@@ -50,7 +52,7 @@ exports.run = (client, message, args, p) => {
         }
         message.channel.send({
             "embed": {
-            "color": 14280797,
+            "color": 9584614,
             "thumbnail": {
                 "url": avatar
             },
