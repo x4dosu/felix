@@ -9,7 +9,7 @@ exports.run = (client, message, args, p) => {
         message.channel.send("STAN LOONA :pray: :nail_care:");
     } else 
     if(arg === "josh") {
-        message.channel.send("okay fair point josh is more epic than loona");
+        message.channel.send("okay fair point josh is more epic than loona (stan loona)");
     } else
     if(arg === "oppa") {
         message.channel.send("I LOVE YOU OPPA :heart: :heart: :heart: :heart:");
@@ -18,7 +18,7 @@ exports.run = (client, message, args, p) => {
         message.channel.send("stan loona stan aaron :pray:");
     } else
     if(arg === "dane" || arg === "x4d") {
-        message.channel.send("How can oyu not stan someone that maps loona maps and impregnantes me");
+        message.channel.send("How can oyu not stan someone that maps loona maps and impregnantes me (i love you dane (penge pera (kamu sama seperti bapamu)))");
     } else
     if(arg === "graphics") {
         message.channel.send("good graphics stan loona");
@@ -83,7 +83,7 @@ exports.run = (client, message, args, p) => {
     if(arg === "dreamcatcher") {
         message.channel.send("dreamcatcher kinda cool yea BUT STAN LOONA");
     } else
-    if(arg === "gowon" || arg === "yeojin" || arg === "chuu" || arg === "heejin" || arg === "hyunjin" || arg === "vivi" || arg === "jinsoul" || arg+args[1] === "oliviahye" || arg+args[1] === "kimlip" || arg === "haseul" || arg === "choerry") {
+    if(arg === "gowon" || arg === "yeojin" || arg === "chuu" || arg === "heejin" || arg === "hyunjin" || arg === "vivi" || arg === "jinsoul" || arg+args[1] === "oliviahye" || arg+args[1] === "kimlip" || arg === "haseul" || arg === "choerry" || arg === "yves") {
         message.channel.send(":heart_eyes: :heart_eyes: :heart_eyes:");
     } else
     if(arg === "matt" || arg === "matthew") {

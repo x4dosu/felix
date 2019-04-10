@@ -1,6 +1,6 @@
 exports.run = (client, message, args, p) => {
     //check if the author id is not superior
-    if(client.isSuperior) return message.channel.send("You can't use this command :no_entry_sign:");
+    if(!client.isSuperior) return message.channel.send("You can't use this command :no_entry_sign:");
     //if no guild entered return
     if(!args[0]) return message.channel.send("Please enter a guild");
     let invg = args.join(" ");

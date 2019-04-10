@@ -1,6 +1,6 @@
 exports.run = (client, message, args, p) => {
     //if author isn't cool enough return
-    if(client.isSuperior) return message.channel.send("no");
+    if(!client.isSuperior) return message.channel.send(client.config.notSuperiorException);
     let type = args[0];
     let activity;
     let url;

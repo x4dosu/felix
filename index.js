@@ -5,10 +5,10 @@ before you can run the bot on a new machine
 1. open the modules installer
 2. put your own tokens in these files:
 
-  Step 1: discord token in config.json (line 4)
-  Step 2: osu tokens in config.json (line 6 until line 12 after k=your-token)
-  Step 3: beatconnect token in config.json (line 14)
-  Step 4: google token in config.json (line 17)
+  Step 1: discord token in config.js (line 4)
+  Step 2: osu tokens in config.js (line 6 until line 12 after k=your-token)
+  Step 3: beatconnect token in config.js (line 14)
+  Step 4: google token in config.js (line 17)
 
   you can get the tokens from:
     discord token:
@@ -39,8 +39,8 @@ const http = require("https");
 //create the bot / client object
 const client = new Discord.Client();
 
-//import for the config.json file
-const config = require("./config.json");
+//import for the config.js file
+const config = require("./config.js");
 
 //make sure the imports are everywhere accesible
 client.config = config;
@@ -49,22 +49,20 @@ client.request = request;
 client._ = _;
 client.ojs = ojs;
 client.http = http;
-
+client.functions = require("./commands/functions/otherFunctions.js");
 //databases
-client.database = new Enmap({name: "database"});
-client.commands = new Enmap({name: "commands"});
-client.osuNames = new Enmap({name: "osu"});
-
-client.lastMap = new Enmap({name: "lastMap"});
-
-client.specialNSFW = new Enmap({name: "nsfwPlus"});
-
-client.edaters = new Enmap({name: "edaters"});
-client.edateRequest = new Enmap({name: "edateRequest"});
-client.sex = new Enmap({name: "sex"});
-client.sexRequest = new Enmap({name: "sexRequest"});
-client.kids = new Enmap({name: "kids"});
-client.birthRequest = new Enmap({name: "birthRequest"});
+client.database = new Enmap({ name: "database" });
+client.commands = new Enmap({ name: "commands" });
+client.osuNames = new Enmap({ name: "osu" });
+client.lastMap = new Enmap({ name: "lastMap" });
+client.specialNSFW = new Enmap({ name: "nsfwPlus" });
+client.edaters = new Enmap({ name: "edaters" });
+client.edateRequest = new Enmap({ name: "edateRequest" });
+client.sex = new Enmap({ name: "sex" });
+client.sexRequest = new Enmap({ name: "sexRequest" });
+client.kids = new Enmap({ name: "kids" });
+client.kidID = new Enmap({ name: "kidsNameID" });
+client.birthRequest = new Enmap({ name: "birthRequest" });
 
 /*
 * this is just to make a new line after clearing the command prompt and running the bot with
@@ -92,7 +90,7 @@ Felix 🦋 started using version 3.0.3
 
 //load databases & log it
 client.database.defer.then( () => {console.log(`The configurations for ${client.database.size} servers have been loaded`);});
-client.commands.defer.then( () => {console.log(`${client.commands.size} commands have been loaded`);});
+client.commands.defer.then( () => {console.log(`A total of ${client.commands.size} commands have been loaded`);});
 client.osuNames.defer.then( () => {console.log(`The osu names of ${client.osuNames.size} users have been loaded`);});
 
 //ERROR AND WARN HAVE TO BE THERE OTHERWISE BOT CAN CRASH WITHOUT ANY ERROR MESSAGE OR ANYTHING!
@@ -158,6 +156,14 @@ client.osuConfig = {
   yozora: "-",
   kawata: "-"
 };
+
+//array of all users with extra bot perms
+client.privileged = [
+  client.config.ownerID,
+  client.config.aaronID,
+  client.config.badgraphicsID,
+  client.config.x4dID
+];
 
 //connect bot with discord servers :flushed:
 client.login(config.token);

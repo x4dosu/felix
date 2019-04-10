@@ -3,16 +3,17 @@ module.exports = (client) => {
     console.log(`${client.user.username} started using version ${client.config.version}`);
 
     //changes the game that is displayed in discord activity
-    client.user.setActivity(`your orders | ${client.config.prefix}help`, { type: 'LISTENING' });
+    client.user.setActivity(`felix cry | ${client.config.prefix}help`, { type: 'WATCHING' });
     //changes the presence
-    client.user.setPresence({status:'idle'});
+    client.user.setPresence({status:'online'});
 
     //reset all requests & requesters when starting to prevent buggy behaviour
     client.sexRequest.deleteAll();
     client.edateRequest.deleteAll();
     client.birthRequest.deleteAll();
 
-    /*this code can be used to log the guilds not recommended for bigger bots though
+    /*this code can be used to log the guilds not recommended for bigger bots though 
+    or if you want to keep your cmd clean
     
     const Guilds = client.guilds.map(g => g.name).join("\n");
     console.log(`Bot for ${client.guilds.size} guilds: \n\n${Guilds}`);

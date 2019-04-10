@@ -14,9 +14,9 @@ top <name> :: ${client.config.topCmd}
 
 last <name> :: ${client.config.lastCmd}
 
-beatconnect <map name> :: ${client.config.beatconnectCmd}
-
 compare <name> :: ${client.config.compareCmd}
+
+beatconnect <map name> :: ${client.config.beatconnectCmd}
 
 akatsuki :: ${client.config.akatsukiCmd}
 
@@ -56,7 +56,13 @@ ebirth :: ${client.config.ebirthCmd}
 
 eabort :: ${client.config.eabortCmd}
 
-family <name> :: ${client.config.familyCmd}\`\`\``);
+family <name> :: ${client.config.familyCmd}
+
+kid <name> :: ${client.config.kidCmd}
+
+youtube <query> :: ${client.config.youtubeCmd}
+
+stan <name> :: ${client.config.stanCmd}\`\`\``);
             return;
         }
         //if the args are equal to util
@@ -73,7 +79,7 @@ config set <property> <value> :: ${client.config.configCmd}\`\`\``);
         } else
         //if the args are equal to owner
         if(help === "owner") {
-            if(client.isSuperior) return message.channel.send({"embed": {
+            if(!client.isSuperior) return message.channel.send({"embed": {
                 "description": "These commands are only accesible for the creator of the bot",
                 "color": 16399236
             }});
@@ -118,7 +124,7 @@ eval <code> :: ${client.config.evalCmd}\`\`\``);
             },
             {
                 "name": "OSU:",
-                "value": "osu, profile, top, last, beatconnect, compare, akatsuki, ripple, gatari, kurikku, enshi, enjuu"
+                "value": "osu, profile, top, last, compare"
             },
             {
                 "name": "NSFW:",
@@ -126,7 +132,7 @@ eval <code> :: ${client.config.evalCmd}\`\`\``);
             },
             {
                 "name": "FUN",
-                "value": "edate, esex, epregnancy, ebirth, eabort, family"
+                "value": "edate, esex, epregnancy, ebirth, eabort, family, kid, youtube, stan"
             },
             {
                 "name": "UTIL:",

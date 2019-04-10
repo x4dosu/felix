@@ -27,7 +27,7 @@ exports.run = (client, message, args, p) => {
         if(totalSites <= 1) {
         site = 0;
         } else {
-        site = getRandomInt(totalSites);
+        site = client.functions.getRandomInt(totalSites);
         }
         let gUrl = url + "&page=" + site;
         //request the gelbooru json url with the site specified
@@ -35,7 +35,7 @@ exports.run = (client, message, args, p) => {
             let body = r.body;
             if(!body.posts[0]) return message.channel.send("Couldn't find anything under this tag!");
             //post randomizer
-            let i = getRandomInt(body.count);
+            let i = client.functions.getRandomInt(body.count);
 
             let bodyurl = body.posts[i].file_url;
             
@@ -50,9 +50,4 @@ exports.run = (client, message, args, p) => {
             }});
         });
     });
-}
-/*this gets a random int selected 
-example getRandomInt(2) will either give 0 or 1*/
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
 }

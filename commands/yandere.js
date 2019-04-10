@@ -5,17 +5,17 @@ exports.run = (client, message, args, p) => {
     let url = client.config.yandere + tag;
     //if someone doesn't have nsfw+ enabled check these things
     if(client.specialNSFW.get(message.author.id, "nsfw") === false) {
-        if(message.channel.nsfw === false) return message.reply("You can't use this command here!");
-        if(tag.includes("loli")) return message.channel.send("Don't get me banned!");
-        if(tag.includes("toddlercon")) return message.channel.send("Don't get me banned!");
-        if(tag.includes("shota")) return message.channel.send("Don't get me banned!");
-        if(tag.includes("child")) return message.channel.send("Don't get me banned!");
+        if(message.channel.nsfw === false) return message.reply(client.config.notNSFWChannelException);
+        if(tag.includes("loli")) return message.channel.send(client.config.illegalException);
+        if(tag.includes("toddlercon")) return message.channel.send(client.config.illegalException);
+        if(tag.includes("shota")) return message.channel.send(client.config.illegalException);
+        if(tag.includes("child")) return message.channel.send(client.config.illegalException);
     }
     //request the json from the yandere url with the tag
     client.snekfetch.get(url).then((r) => {
         let body = r.body;
         //if no first result return
-        if(!body[0]) return message.channel.send("Couldn't find anything under this tag!");
+        if(!body[0]) return message.channel.send(client.config.noResultException);
         let bodyurl = body[0].file_url;
         //send the image in the channel
         message.channel.send({"embed": {

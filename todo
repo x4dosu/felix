@@ -4,7 +4,6 @@
 
             1. add random and other own order functions to beatconnect.js
             2. add other gamemodes for beatconnect
-            3. improve beatconnect in general //i mean idk its kinda alright already??
             
             (osu.js):
 
@@ -13,40 +12,19 @@
                 cbt pp: https://www.npmjs.com/package/ctb-pp-calc
                 mania pp: https://www.npmjs.com/package/wifipiano2
             )
-
-            2. add if fc pp calc & star rating to gatari top command
-
-            3. add osu sig (it looks cool (
-                osusig: https://lemmmy.pw/osusig/
-            ))
-
-            4. rewrite bloodcat command when it's back
-            5. show map completion & maybe tries
-            6. add if less than four results to $osu maps 
+            3. rewrite bloodcat command when it's back
+            //i mean i deleted it but i will add it back some day :pray:
+            4. add if less than four results to $osu maps & add if less than four results to $osu top
             ^-//maybe even rewrite full command and make it more similar to the beatconnect cmd
             ^^--////maybe even make it use the beatconnect api :thinking: the uniqueIDs are just lowkey yikes
-            7. add if less than four results to $osu top
-            8. calculate if fc pp accurately by recalculating the accuracy without the misses
+            5. change the format of the date from year:month:day hours:minutes:seconds to days Days, hours Hours and minutes Minutes or soemthing
 
-            (config.js):
+            (commands/config.js):
 
-            1. add more configurations to config.js (maybe add user configurations)
+            1. add more configurations to commands/config.js (maybe add user configurations)
 
             (general things):
 
             1. fix [ws] [connection] Server closed the WebSocket connection: 1000
-            2. add sleep and wake up command to count how long someone is sleeping //cool idea by badgraphics :3
-            3. improve my github wiki with a lot of documentation
-            4. add kids database for every kid
-
-            (esex.js / message.js esex function)
-
-            1. add esex counter
-
-            (osuFunctions.js)
-
-            1. document the shit
-            
-            ideas for kids
-
-            make database where i store all kids with the format nameuserid
+            2. improve my github wiki with a lot of documentation
+			3. add error messages to config

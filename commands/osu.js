@@ -4,97 +4,6 @@ exports.run = (client, message, args, p) => {
     //if there are first args
     if(args[0]) {
         let firstArgs = args[0].toLowerCase();
-        //if the first args are bloodcat or b
-
-        //todo rewrite bloodcat
-        if(firstArgs === "bloodcat" || firstArgs === "b" || firstArgs === "bc") {
-            //if there are second ares
-            if(args[1]) {
-                let secondArgs = args[1].toLowerCase();
-                //if the secondas args are top or t
-                if(secondArgs === "top" || secondArgs === "t") {
-                    //request the json from the bloodcat api
-                    client.snekfetch.get(cfg.bloodcatApi).then((r) => {
-                        let body = r.body;
-                        //if no content return
-                        if(!body[0]) return message.channel.send("Couldn't find any maps! Please report this to the developer Felix#9385");
-                        //send top maps in channel
-                        message.channel.send({"embed": {
-                            "title": "Top beatmaps on Bloodcat:",
-                            "color": 16399236,
-                            "fields": [{
-                                "name": body[0].title + " by " + body[0].artist + " mapped by " + body[0].creator,
-                                "value": "[Download](https://bloodcat.com/osu/s/" + body[0].id + ")"
-                            },
-                            {
-                                "name": body[1].title + " by " + body[1].artist + " mapped by " + body[1].creator,
-                                "value": "[Download](https://bloodcat.com/osu/s/" + body[1].id + ")"
-                            },
-                            {
-                                "name": body[2].title + " by " + body[2].artist + " mapped by " + body[2].creator,
-                                "value": "[Download](https://bloodcat.com/osu/s/" + body[2].id + ")"
-                            },
-                            {
-                                "name": body[3].title + " by " + body[3].artist + " mapped by " + body[3].creator,
-                                "value": "[Download](https://bloodcat.com/osu/s/" + body[3].id + ")"
-                            },
-                            {
-                                "name": body[4].title + " by " + body[4].artist + " mapped by " + body[4].creator,
-                                "value": "[Download](https://bloodcat.com/osu/s/" + body[4].id + ")"
-                        }]}});
-                  });
-                  return;
-                } else
-                //if secondargs are search or s
-                if(secondArgs === "search" || secondArgs === "s") {
-                    let mapName = args.slice(2).join(" ");
-                    //if the map name starts with status then it should get put at the end of the map name
-                    if(mapnName.startsWith('status=')) {
-                        let arr = mapname.split(' ');
-                        let removed = arr.shift();
-                        mapName = arr.join(' ').trim() + removed.trim();
-                    }
-                    //if it includes @everyone etc return
-                    if(mapName.includes("@everyone")) return message.channel.send("Please don't try to abuse the search command by pinging everyone");
-                    if(mapName.includes("@here")) return message.channel.send("Please don't try to abuse the search command by pinging everyone");
-                    
-                    let finalMapName = mapNameCutter(mapName);
-
-                    //put the bloodcat api url and map name together and replace status= with the following things
-                    let map = cfg.bloodcatApi + finalMapName; 
-                    message.channel.send(map);
-                    //if no mapname return
-                    if(!mapName) return message.channel.send("Please enter the name of a Beatmap!");
-                    //request the json
-                    client.snekfetch.get(map).then((r) => {
-                        let body = r.body;
-                        //if no content return
-                        if(!body[0]) return message.channel.send("Couldn't find this map!");
-                        let bodyID = body[0].id;
-                        let bodyTitle = body[0].title;
-                        let bodyArtist = body[0].artist;
-                        let bodyCreator = body[0].creator;
-                        //send top result
-                        message.channel.send({"embed": {
-                            "title": "**Title:** " + bodyTitle,
-                            "description": "**Artist:** " + bodyArtist + "**\nCreator:** " + bodyCreator,
-                            "url": "https://bloodcat.com/osu/s/" + bodyID,
-                            "color": 16399236
-                        }});
-                        //if you want just the body use this: console.log(JSON.stringify(r.body[0]));
-                    });
-                    return;
-                }
-            }
-            message.channel.send({"embed": {
-                "description": "**Bloodcat:**\n\n**NOTICE: IF THE BOT DOESN'T REPLY THEN THAT IS BLOODCAT'S FAULT CHECK THEIR SITE**\n\nusage: " + p + "osu bloodcat <command>\n\nsearch <map name> <status=r|a|q|l|g>: ``search a map on bloodcat and (optional) choose the status``\ntop: ``lists top maps on bloodcat``\n\naliases: s, t",
-                "color": 16399236
-            }});
-            return;
-
-
-
-        } else 
         //most of the code below this is just filling some functions that are below all of this so I'm not going to document it
         if(firstArgs === "profile" || firstArgs === "p") {
             osu.get.profile(cfg.banchoProfileApi, cfg.banchoAviUrl, cfg.banchoPUrl, args, message, client, 1, "bancho");
@@ -330,6 +239,7 @@ exports.run = (client, message, args, p) => {
 
                         //request the new profile api json thing im gay
                         client.request(profile, {json:true}, (err, res, body) => {
+                            if(!body.stats.playcount) return message.channel.send(`${bodyname} is probably restricted on Gatari`);
                             let bodycrank = body.stats.country_rank;
                             let bodyplaycount = body.stats.playcount;
                             //send the profile embed
@@ -377,13 +287,14 @@ exports.run = (client, message, args, p) => {
                         let bodyp = r.body;
                         //if no user found
                         if(bodyp.stats.id === 0) return message.channel.send("I couldn't find " + tusername);
+                        let pname = bodyp.stats.username;
                         let last = cfg.gatariRecentApi + bodyp.stats.id;
                         //request last json
                         client.snekfetch.get(last).then((r) => {
                             let bodyr = r.body;
                             //if no last plays
-                            if(!bodyr.scores[0]) return message.channel.send(tusername + " doesn't seem to have any recent plays");
-                            let pname = bodyp.stats.username;
+                            if(bodyr.scores === null) return message.channel.send(pname + " is probably restricted on Gatari");
+                            if(!bodyr.scores[0]) return message.channel.send(pname + " doesn't seem to have any recent plays");
 
                             //replace the grade to emojis
                             let rank = rankToEmojiGatariEdition(bodyr.scores, 0, client);
@@ -395,7 +306,7 @@ exports.run = (client, message, args, p) => {
                             let rawMods = bodyr.scores[0].mods; 
                             let mods = cfg.noMod;
                             if(rawMods > 0) {
-                                mods = nearestPow2(rawMods);
+                                mods = client.functions.nearestPow2(rawMods);
                             }
                             
                             //request the beatmap for pp calculation and sr calculation
@@ -437,7 +348,7 @@ exports.run = (client, message, args, p) => {
                                 let stars = rawStars.total.toFixed(2);
                                 let pp = rawPP.total.toFixed(2);
 
-                                let mt = bodyr.scores[0].beatmap.song_name + ` (${stars}*)`;
+                                let mt = bodyr.scores[0].beatmap.song_name + ` (${stars} ⃰ )`;
                                 let md = `PP: ${pp}pp ${ifFCPP}\nAccuracy: ${acc}% (${bodyr.scores[0].count_300}/${bodyr.scores[0].count_100}/${bodyr.scores[0].count_50}/${bodyr.scores[0].count_miss})\nCombo: ${bodyr.scores[0].max_combo}x / ${bodyr.scores[0].beatmap.fc}x\n${mods}Grade:  ${rank}\n[Download](https://osu.ppy.sh/beatmapsets/${bodyr.scores[0].beatmap.beatmapset_id}/download)`;
                                 //send last plays in channel
                                 message.channel.send({ "embed": {
@@ -484,17 +395,15 @@ exports.run = (client, message, args, p) => {
                         client.snekfetch.get(profile).then((r) => {
                             let bodyp = r.body;
                             if(bodyp.stats.id === 0) return message.channel.send("I couldn't find " + tusername);
+                            let pname = bodyp.stats.username;
                             let top = cfg.gatariTopApi + bodyp.stats.id;
                             client.snekfetch.get(top).then((r) => {
                                 let bodyt = r.body;
-                                if(!bodyt.scores[0]) return message.channel.send(tusername + " doesn't seem to have any top plays");
-                                if(!bodyt.scores[1]) return message.channel.send(tusername + " doesn't seem to have any top plays");
-                                if(!bodyt.scores[2]) return message.channel.send(tusername + " doesn't seem to have any top plays");
-                                let pname = bodyp.stats.username;
+                                if(bodyt.scores === null) return message.channel.send(pname + " is probably restricted on Gatari");
+                                if(!bodyt.scores[0]) return message.channel.send(pname + " doesn't seem to have any top plays");
+                                if(!bodyt.scores[1]) return message.channel.send(pname + " doesn't seem to have any top plays");
+                                if(!bodyt.scores[2]) return message.channel.send(pname + " doesn't seem to have any top plays");
                                 let purl = "https://osu.gatari.pw/u/" + bodyp.stats.id;
-                                let m1t = bodyt.scores[0].beatmap.song_name;
-                                let m2t = bodyt.scores[1].beatmap.song_name;
-                                let m3t = bodyt.scores[2].beatmap.song_name;
 
                                 let rank1 = rankToEmojiGatariEdition(bodyt.scores, 0, client);
                                 let rank2 = rankToEmojiGatariEdition(bodyt.scores, 1, client);
@@ -511,44 +420,141 @@ exports.run = (client, message, args, p) => {
                                 let rawMods1 = bodyt.scores[0].mods;
                                 let mods1 = cfg.noMod;
                                 if(rawMods1 > 0) {
-                                    mods1 = nearestPow2(rawMods1);
+                                    mods1 = client.functions.nearestPow2(rawMods1);
                                 }
                 
                                 let rawMods2 = bodyt.scores[1].mods;
                                 let mods2 = cfg.noMod;
                                 if(rawMods2 > 0) {
-                                    mods2 = nearestPow2(rawMods2);
+                                    mods2 = client.functions.nearestPow2(rawMods2);
                                 }
                 
                                 let rawMods3 = bodyt.scores[2].mods;
                                 let mods3 = cfg.noMod;
                                 if(rawMods3 > 0) {
-                                    mods3 = nearestPow2(rawMods3);
+                                    mods3 = client.functions.nearestPow2(rawMods3);
                                 }
-                
-                                let m1d = `PP: ${parseInt(bodyt.scores[0].pp)}pp\nAccuracy: ${acc1}% (${bodyt.scores[0].count_300}/${bodyt.scores[0].count_100}/${bodyt.scores[0].count_50}/${bodyt.scores[0].count_miss})\nCombo: ${bodyt.scores[0].max_combo}x / ${bodyt.scores[0].beatmap.fc}x\n${mods1}Grade:  ${rank1}\n[Download](https://osu.ppy.sh/beatmapsets/${bodyt.scores[0].beatmap.beatmapset_id}/download)`;
-                                let m2d = `PP: ${parseInt(bodyt.scores[1].pp)}pp\nAccuracy: ${acc2}% (${bodyt.scores[1].count_300}/${bodyt.scores[1].count_100}/${bodyt.scores[1].count_50}/${bodyt.scores[1].count_miss})\nCombo: ${bodyt.scores[1].max_combo}x / ${bodyt.scores[1].beatmap.fc}x\n${mods2}Grade:  ${rank2}\n[Download](https://osu.ppy.sh/beatmapsets/${bodyt.scores[1].beatmap.beatmapset_id}/download)`;
-                                let m3d = `PP: ${parseInt(bodyt.scores[2].pp)}pp\nAccuracy: ${acc3}% (${bodyt.scores[2].count_300}/${bodyt.scores[2].count_100}/${bodyt.scores[2].count_50}/${bodyt.scores[2].count_miss})\nCombo: ${bodyt.scores[2].max_combo}x / ${bodyt.scores[2].beatmap.fc}x\n${mods3}Grade:  ${rank3}\n[Download](https://osu.ppy.sh/beatmapsets/${bodyt.scores[2].beatmap.beatmapset_id}/download)`;
-                
-                                message.channel.send({ "embed": {
-                                    "title": `Top plays from: ${pname}`,
-                                    "url": purl,
-                                    "color": 16399236,
-                                    "fields": [
-                                    {
-                                        "name": m1t,
-                                        "value": m1d
-                                    },
-                                    {
-                                        "name": m2t,
-                                        "value": m2d
-                                    },
-                                    {
-                                        "name": m3t,
-                                        "value": m3d
+
+                                client.request('http://osu.ppy.sh/osu/' + bodyt.scores[0].beatmap.beatmap_id, (error, response, body1) => {
+                                    //calculate if fc pp and star rating
+                                    //shoot the request body in the ojsama parser
+                                    let parser = new client.ojs.parser().feed(body1);
+                                    //get the map
+                                    let map = parser.map;
+                                    //calculate the raw stars
+                                    let rawStars = new client.ojs.diff().calc({map: map, mods: rawMods1});
+                                    
+                                    let ifFCPP1 = "";
+                                    //if not fc
+                                    if(bodyt.scores[0].full_combo === false) {
+                                        //max combo of the map
+                                        let comboFC = parseInt(bodyt.scores[0].beatmap.fc);
+                                        //no misses
+                                        let nmissFC = parseInt(0);
+                                        //get the accuracy
+                                        let acc_percent = parseFloat(accRaw1);
+                                        //calculate if fc pp
+                                        fcPP = client.ojs.ppv2({
+                                            stars: rawStars,
+                                            combo: comboFC,
+                                            nmiss: nmissFC,
+                                            acc_percent: acc_percent,
+                                        });
+                                        //change the variable
+                                        ifFCPP1 = `=> ${fcPP.total.toFixed(2)}pp`;
                                     }
-                                    ]
-                                }});
+                                    let stars1 = rawStars.total.toFixed(2);
+                                    //request the file of the second map
+                                    client.request('http://osu.ppy.sh/osu/' + bodyt.scores[0].beatmap.beatmap_id, (error, response, body2) => {
+                                        //calculate if fc pp and star rating
+                                        //shoot the request body in the ojsama parser
+                                        let parser = new client.ojs.parser().feed(body2);
+                                        //get the map
+                                        let map = parser.map;
+                                        //calculate the raw stars
+                                        let rawStars = new client.ojs.diff().calc({map: map, mods: rawMods2});
+                                        
+                                        let ifFCPP2 = "";
+                                        //if not fc
+                                        if(bodyt.scores[1].full_combo === false) {
+                                            //max combo of the map
+                                            let comboFC = parseInt(bodyt.scores[1].beatmap.fc);
+                                            //no misses
+                                            let nmissFC = parseInt(0);
+                                            //get the accuracy
+                                            let acc_percent = parseFloat(accRaw2);
+                                            //calculate if fc pp
+                                            fcPP = client.ojs.ppv2({
+                                                stars: rawStars,
+                                                combo: comboFC,
+                                                nmiss: nmissFC,
+                                                acc_percent: acc_percent,
+                                            });
+                                            //change the variable
+                                            ifFCPP2 = `=> ${fcPP.total.toFixed(2)}pp`;
+                                        }
+                                        let stars2 = rawStars.total.toFixed(2);
+                                        //request the file of the third map
+                                        client.request('http://osu.ppy.sh/osu/' + bodyt.scores[0].beatmap.beatmap_id, (error, response, body3) => {
+                                            //calculate if fc pp and star rating
+                                            //shoot the request body in the ojsama parser
+                                            let parser = new client.ojs.parser().feed(body3);
+                                            //get the map
+                                            let map = parser.map;
+                                            //calculate the raw stars
+                                            let rawStars = new client.ojs.diff().calc({map: map, mods: rawMods3});
+                                            
+                                            let ifFCPP3 = "";
+                                            //if not fc
+                                            if(bodyt.scores[2].full_combo === false) {
+                                                //max combo of the map
+                                                let comboFC = parseInt(bodyt.scores[2].beatmap.fc);
+                                                //no misses
+                                                let nmissFC = parseInt(0);
+                                                //get the accuracy
+                                                let acc_percent = parseFloat(accRaw3);
+                                                //calculate if fc pp
+                                                fcPP = client.ojs.ppv2({
+                                                    stars: rawStars,
+                                                    combo: comboFC,
+                                                    nmiss: nmissFC,
+                                                    acc_percent: acc_percent,
+                                                });
+                                                //change the variable
+                                                ifFCPP3 = `=> ${fcPP.total.toFixed(2)}pp`;
+                                            }
+                                            let stars3 = rawStars.total.toFixed(2);
+
+                                            let m1t = bodyt.scores[0].beatmap.song_name + ` (${stars1} ⃰ )`;
+                                            let m2t = bodyt.scores[1].beatmap.song_name + ` (${stars2} ⃰ )`;
+                                            let m3t = bodyt.scores[2].beatmap.song_name + ` (${stars3} ⃰ )`;
+                            
+                                            let m1d = `PP: ${parseInt(bodyt.scores[0].pp)}pp ${ifFCPP1}\nAccuracy: ${acc1}% (${bodyt.scores[0].count_300}/${bodyt.scores[0].count_100}/${bodyt.scores[0].count_50}/${bodyt.scores[0].count_miss})\nCombo: ${bodyt.scores[0].max_combo}x / ${bodyt.scores[0].beatmap.fc}x\n${mods1}Grade:  ${rank1}\n\`${bodyt.scores[0].time.split("T").join(" ")}\`\n[Download](https://osu.ppy.sh/beatmapsets/${bodyt.scores[0].beatmap.beatmapset_id}/download)`;
+                                            let m2d = `PP: ${parseInt(bodyt.scores[1].pp)}pp ${ifFCPP2}\nAccuracy: ${acc2}% (${bodyt.scores[1].count_300}/${bodyt.scores[1].count_100}/${bodyt.scores[1].count_50}/${bodyt.scores[1].count_miss})\nCombo: ${bodyt.scores[1].max_combo}x / ${bodyt.scores[1].beatmap.fc}x\n${mods2}Grade:  ${rank2}\n\`${bodyt.scores[1].time.split("T").join(" ")}\`\n[Download](https://osu.ppy.sh/beatmapsets/${bodyt.scores[1].beatmap.beatmapset_id}/download)`;
+                                            let m3d = `PP: ${parseInt(bodyt.scores[2].pp)}pp ${ifFCPP3}\nAccuracy: ${acc3}% (${bodyt.scores[2].count_300}/${bodyt.scores[2].count_100}/${bodyt.scores[2].count_50}/${bodyt.scores[2].count_miss})\nCombo: ${bodyt.scores[2].max_combo}x / ${bodyt.scores[2].beatmap.fc}x\n${mods3}Grade:  ${rank3}\n\`${bodyt.scores[2].time.split("T").join(" ")}\`\n[Download](https://osu.ppy.sh/beatmapsets/${bodyt.scores[2].beatmap.beatmapset_id}/download)`;
+                            
+                                            message.channel.send({ "embed": {
+                                                "title": `Top plays from: ${pname}`,
+                                                "url": purl,
+                                                "color": 16399236,
+                                                "fields": [
+                                                {
+                                                    "name": m1t,
+                                                    "value": m1d
+                                                },
+                                                {
+                                                    "name": m2t,
+                                                    "value": m2d
+                                                },
+                                                {
+                                                    "name": m3t,
+                                                    "value": m3d
+                                                }
+                                                ]
+                                            }});
+                                        });
+                                    });
+                                });
                             });
                         });
                     return;
@@ -592,21 +598,7 @@ exports.run = (client, message, args, p) => {
         } else
         //todo rewrite maps
         if(firstArgs === "maps" || firstArgs === "m") {
-            let username;
-            //if someone entered a username
-            if(args[1]) {
-                username = args.slice(1).join(" ");
-            } else
-            //else if there is no username get the default username from the database
-            if(!args[1]) {
-                username = client.osuNames.get(message.author.id, "bancho");
-            }
-            //if the user hasn't changed his username in the database then
-            if(username === '-') return message.channel.send("Please enter a user");
-            //if the username includes ping stuff return
-            if(username.includes("@everyone")) return message.channel.send("Please don't try to abuse the top command by pinging everyone");
-            if(username.includes("@here")) return message.channel.send("Please don't try to abuse the top command by pinging everyone");
-    
+            let username = client.functions.username(client, message, args, 1, "bancho");
             let profile = cfg.banchoProfileApi + username;
             let maps = cfg.banchoUserMapApi + username;
 
@@ -731,9 +723,7 @@ exports.run = (client, message, args, p) => {
             //if someone entered a map
             if(args[1]) {
                 mapQuery = args.slice(1).join(" ");
-            } else
-            //else if there is nothing entered return
-            if(!args[0]) return message.channel.send("Please enter a map I should look for");
+            } else return message.channel.send("Please enter a map I should look for");
             //if the pQuery includes ping stuff return
             if(mapQuery.includes("@everyone")) return message.channel.send("Please don't try to abuse the top command by pinging everyone");
             if(mapQuery.includes("@here")) return message.channel.send("Please don't try to abuse the top command by pinging everyone");
@@ -762,6 +752,7 @@ exports.run = (client, message, args, p) => {
               //if no maps return
               if(!body.beatmaps[0]) return message.channel.send(`I couldn't find any maps under ${mapQuery}`);
               //set all maps to first map cause we know we that
+              //edit: nice english felix
               let map1 = body.beatmaps[0].id;
               let uniqueID1 = body.beatmaps[0].unique_id;
               let map2 = map1;
@@ -828,18 +819,9 @@ exports.run = (client, message, args, p) => {
                                 "inline": false
                               };
                               //we leave the other fields blank for now
-                              let field2 = {
-                                "name": "",
-                                "value": ""
-                              };
-                              let field3 = {
-                                "name": "",
-                                "value": ""
-                              };
-                              let field4 = {
-                                "name": "",
-                                "value": ""
-                              };
+                              let field2;
+                              let field3;
+                              let field4;
                               
                               //if the fourth map isn't the same as the first then it exists
                               if(map4 !== map1) {
@@ -919,35 +901,18 @@ exports.run = (client, message, args, p) => {
           return;
         } else
         if(firstArgs === "compare" || firstArgs === 'c') {
-            osu.get.compare(client, message, args, 1, cfg.banchoProfileApi, cfg.banchoUserScoresApi, cfg.banchoMapApi, cfg.banchoAviUrl);
+            osu.get.compare(client, message, args, 1, cfg.banchoProfileApi, cfg.banchoUserScoresApi, cfg.banchoMapApi, cfg.banchoAviUrl, "bancho");
+            return;
         }
     }
     //if no args send help
     message.channel.send({"embed": {
-        "description": "**osu!:** \n\n**bancho:**\n\nprofile (p) <name>: ``sends a bancho profile card``\ntop (t) <name>: ``sends top plays of entered user``\nlast (l) <name>: ``sends recent plays of entered user``\nmaps (m) <name>: ``lists newest maps of entered user``\ncompare (c) <name>: ``compare your scores on the maps your friends recently got scores on``\n\n**private servers:**\n\nakatsuki (a): ``for akatsuki related commands``\nripple (ri): ``for ripple related commands``\ngatari (g): ``for gatari related commands``\nkurikku (ku): ``for kurikku related commands``\nenshi (es): ``for enshi related commands``\nenjuu (ej): ``for enjuu related commands``\nkawata (ka): ``for kawata related commands``\n\n**other:**\n\nbeatconnect <query>: ``search for maps on beatconnect.io``\nbloodcat (bc): ``for bloodcat related commands``\nset (s) <server> <name>: ``sets your default name for selected server``\nname (n): ``lists your default names for the osu servers``\n\n**help:**\n\nusage: " + p + "osu <command>\n\naliases are in ()\nparameters are in <>",
+        "description": "**osu!:** \n\n**bancho:**\n\nprofile (p) <name>: ``sends a bancho profile card``\ntop (t) <name>: ``sends top plays of entered user``\nlast (l) <name>: ``sends recent plays of entered user``\nmaps (m) <name>: ``lists newest maps of entered user``\ncompare (c) <name>: ``compare your scores on the maps your friends recently got scores on``\n\n**private servers:**\n\nakatsuki (a): ``for akatsuki related commands``\nripple (ri): ``for ripple related commands``\ngatari (g): ``for gatari related commands``\nkurikku (ku): ``for kurikku related commands``\nenshi (es): ``for enshi related commands``\nenjuu (ej): ``for enjuu related commands``\nkawata (ka): ``for kawata related commands``\n\n**other:**\n\nbeatconnect <query>: ``search for maps on beatconnect.io``\nset (s) <server> <name>: ``sets your default name for selected server``\nname (n): ``lists your default names for the osu servers``\n\n**help:**\n\nusage: " + p + "osu <command>\n\naliases are in ()\nparameters are in <>",
         "color": 16399236
     }});
 }
 
-//functions to make the code work below:
-
-//function to turn status= in the appropriate url stuff for bloodcat
-function mapNameCutter(name) {
-    name = name.split(' ').join('%20')
-    .split('status=ranked').join('&c=b&s=1&m=&g=&l=')
-    .split('status=r').join('&c=b&s=1&m=&g=&l=')
-    .split('status=approved').join('&c=b&s=2&m=&g=&l=')
-    .split('status=a').join('&c=b&s=2&m=&g=&l=')
-    .split('status=qualified').join('&c=b&s=3&m=&g=&l=')
-    .split('status=q').join('&c=b&s=3&m=&g=&l=')
-    .split('status=loved').join('&c=b&s=4&m=&g=&l=')
-    .split('status=l').join('&c=b&s=4&m=&g=&l=')
-    .split('status=unranked').join('&c=b&s=0&m=&g=&l=')
-    .split('status=graveyarded').join('&c=b&s=0&m=&g=&l=')
-    .split('status=g').join('&c=b&s=0&m=&g=&l=');
-    
-    return name; 
-}
+//some functions to make the code work below:
 
 //I hate gatari so much 
 //just for gatari cause they are special ed kids
@@ -983,101 +948,6 @@ function rankToEmojiGatariEdition(body, bodyIndex, client) {
     return ranking;
 }
 
-//break the mods into pieces by getting the nearest power of 2 or some shit idk
-function nearestPow2(mods) {
-    //create new array
-    let modlist = [];
-    let i = 1;
-    /*while mods isn't no mod and the i < 50 is just in case there happens something bad 
-    i dont want my bot to keep on doing that while thing cause my pc bad*/
-    while(mods!=0 && i < 50) {
-        //i dont know what this is dont ask me i dont speak maths
-        mod = 1 << 31 - Math.clz32(mods);
-        //push the mod in the mod list
-        modlist.push(mod);
-        //remove the number from the mods
-        mods = mods - mod;
-        //add one to i just in case
-        i++;
-    }
-    
-    //replace bitwise mod numbers with discord emojis
-    replaceIntWithMod(modlist);
-    //if the mod list isn't empty return the mods
-    if(modlist.length != 0) return "Mods: " + modlist.join(' ') + " |  ";
-}
-
-//function to replace the bitwise mod numbers with discord emojis
-function replaceIntWithMod(a) {
-    num = 0;
-    //while the number is less than the mod list length repeat
-    while(num <= a.length) {
-        //this should all be self explainable
-        if(a.includes(Mods.None)) {
-            let i = a.indexOf(Mods.None);
-            a[i] = "NoMod";
-        } else if(a.includes(Mods.Easy)) {
-            let i = a.indexOf(Mods.Easy);
-            a[i] = "<:EZ:553697395465125901>";
-        } else if(a.includes(Mods.NoFail)) {
-            let i = a.indexOf(Mods.NoFail);
-            a[i] = "<:NF:553697395691487324>";
-        } else if(a.includes(Mods.TouchDevice)) {
-            let i = a.indexOf(Mods.TouchDevice);
-            a[i] = "Touch Device";
-        } else if(a.includes(Mods.Hidden)) {
-            let i = a.indexOf(Mods.Hidden);
-            a[i] = "<:HD:553697396274757642>";
-        } else if(a.includes(Mods.HardRock)) {
-            let i = a.indexOf(Mods.HardRock);
-            a[i] = "<:HR:553697395322650636>";
-        /*if the mods include perfect then sudden death is
-         there too so we have to remove it if its both*/
-        } else if(a.includes(Mods.SuddenDeath)) {
-            if(!a.includes(Mods.Perfect)) {
-            let i = a.indexOf(Mods.SuddenDeath);
-            a[i] = "<:SD:553697395045564427>";
-            } else {
-            let i = a.indexOf(Mods.SuddenDeath);
-            a[i] = "";
-            }
-        } else if(a.includes(Mods.Relax)) {
-            let i = a.indexOf(Mods.Relax);
-            a[i] = "<:RX:553697395116867587>";
-        } else if(a.includes(Mods.HalfTime)) {
-            let i = a.indexOf(Mods.HalfTime);
-            a[i] = "<:HT:553697395846938624> ";
-        } else if(a.includes(Mods.SpunOut)) {
-            let i = a.indexOf(Mods.SpunOut);
-            a[i] = "<:SO:553697395490422795>";
-        //same thing as with sudden death & perfect we have to remove double time if nightcore is included
-        } else if(a.includes(Mods.DoubleTime)) {
-            if(!a.includes(Mods.Nightcore)) {
-            let i = a.indexOf(Mods.DoubleTime);
-            a[i] = "<:DT:553697396677279764> ";
-            } else {
-            let i = a.indexOf(Mods.DoubleTime);
-            a[i] = "";
-            }
-        } else if(a.includes(Mods.Nightcore)) {
-            let i1 = a.indexOf(Mods.Nightcore);
-            a[i1] = "<:NC:553697395796344853>";
-        } else if(a.includes(Mods.Flashlight)) {
-            let i = a.indexOf(Mods.Flashlight);
-            a[i] = "<:FL:553697395498549250>";
-        } else if(a.includes(Mods.Autoplay)) {
-            let i = a.indexOf(Mods.Autoplay);
-            a[i] = "<:Auto:553697397444706308>";
-        } else if(a.includes(Mods.Relax2)) {
-            let i = a.indexOf(Mods.Relax2);
-            a[i] = "<:AP:553697395578372126>";
-        } else if(a.includes(Mods.Perfect)) {
-            let i1 = a.indexOf(Mods.Perfect);
-            a[i1] = "<:PF:553697395494617118>";
-        } 
-    num++;
-    }
-}
 
 //change the status to a string
 function getStatus(mapn) {
@@ -1178,45 +1048,4 @@ function hypes(hypes) {
         hype = `${hypes} :mega:`;
     }
     return hype;
-}
-
-
-//bitwise enum of all mods
-var Mods =
-{
-	None           : 0,
-	NoFail         : 1,
-	Easy           : 2,
-	TouchDevice    : 4,
-	Hidden         : 8,
-	HardRock       : 16,
-	SuddenDeath    : 32,
-	DoubleTime     : 64,
-	Relax          : 128,
-	HalfTime       : 256,
-	Nightcore      : 512, // Nightcore in theory always comes with DT
-	Flashlight     : 1024,
-	Autoplay       : 2048,
-	SpunOut        : 4096,
-	Relax2         : 8192,	// Autopilot
-	Perfect        : 16384, // Only set along with SuddenDeath. i.e: PF only gives 16416  
-	Key4           : 32768,
-	Key5           : 65536,
-	Key6           : 131072,
-	Key7           : 262144,
-	Key8           : 524288,
-	FadeIn         : 1048576,
-	Random         : 2097152,
-	Cinema         : 4194304,
-	Target         : 8388608,
-	Key9           : 16777216,
-	KeyCoop        : 33554432,
-	Key1           : 67108864,
-	Key3           : 134217728,
-	Key2           : 268435456,
-	ScoreV2        : 536870912,
-	LastMod        : 1073741824,
-        KeyMod : 67108864 | 268435456 | 134217728 | 32768 | 65536 | 131072 | 262144 | 524288 | 16777216 | 33554432,
-        FreeModAllowed : 1 | 2 | 8 | 16 | 32 | 1024 | 1048576 | 128 | 8192 | 4096 | 67108864 | 268435456 | 134217728 | 32768 | 65536 | 131072 | 262144 | 524288 | 16777216 | 33554432,
-        ScoreIncreaseMods : 8 | 16 | 64 | 1024 | 1048576
 }

@@ -16,6 +16,10 @@ exports.run = (client, message, args, p) => {
             let partnerObject = client.users.get(partner);
             partnerEmbed = `${partnerObject.tag} (${timestamp})`;
         }
+        let userEmbed = "-";
+        if(client.sex.get(user)) {
+            userEmbed = `Esex counter: ${client.sex.get(user, "counter")}`;
+        }
         message.channel.send({
             "embed": {
             "color": 9584614,
@@ -28,11 +32,15 @@ exports.run = (client, message, args, p) => {
             },
             "fields": [
                 {
+                    "name": userObject.username + " :star2:",
+                    "value": userEmbed
+                },  
+                {
                     "name": "Partner :heart:",
                     "value": partnerEmbed
                 },
                 {
-                    "name": "Kids :couple:",
+                    "name": "Kids :couple: (" + client.kids.get(user, "kids").length + ")",
                     "value": kids
                 }
         ]}});
@@ -50,6 +58,7 @@ exports.run = (client, message, args, p) => {
             let partnerObject = client.users.get(partner);
             partnerEmbed = `${partnerObject.tag} (${timestamp})`;
         }
+        let userEmbed = `Esex counter: ${client.sex.get(user, "counter")}`
         message.channel.send({
             "embed": {
             "color": 9584614,
@@ -62,11 +71,15 @@ exports.run = (client, message, args, p) => {
             },
             "fields": [
                 {
+                    "name": "You :star2:",
+                    "value": userEmbed
+                },  
+                {
                     "name": "Partner :heart:",
                     "value": partnerEmbed
                 },
                 {
-                    "name": "Kids :couple:",
+                    "name": "Kids :couple: (" + client.kids.get(user, "kids").length + ")",
                     "value": kids
                 }
         ]}});

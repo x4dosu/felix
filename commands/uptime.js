@@ -1,6 +1,6 @@
 exports.run = (client, message, args, p) => {
     //check if author id isnt me
-    if(client.isSuperior) return message.channel.send("You can't use this command :no_entry_sign:");
+    if(!client.isSuperior) return message.channel.send(client.config.notSuperiorException);
     
     //convert uptime into readable numbers
     let totalSeconds = (client.uptime / 1000);

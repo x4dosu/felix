@@ -28,12 +28,17 @@ exports.run = (client, message, args, p) => {
         client.sexRequest.set(partner, true, "eSexRequest");
         //set your id as the requester
         client.sexRequest.set(partner, message.author.id, "eSexRequester");
+        //increase the counter by one
+        client.sex.inc(partner, "counter");
+        client.sex.inc(userID, "counter");
+        //get the counter nr
+        let sexNr = client.sex.get(partner, "counter");
         //send sex message cowboy
         message.channel.send(`<@${sexer.id}>, do you want to have esex with <@${message.author.id}>? \`yes\` or \`no\``)
         .then(setTimeout(
             function(){
                 //if no answer
-                if(client.sex.get(partner, "consent") === false && client.sexRequest.get(partner, "eSexRequest") === true) {
+                if(client.sex.get(partner, "consent") === false && client.sexRequest.get(partner, "eSexRequest") === true && client.sex.get(partner, "counter") === sexNr) {
                     //reset requests
                     client.sexRequest.set(partner, false, "eSexRequest");
                     client.sexRequest.set(partner, "-", "eSexRequester");
