@@ -23,3 +23,4 @@ type node index.js
 ## Stopping the bot:
 
 ctrl+c on Windows
+test
