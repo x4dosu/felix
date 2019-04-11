@@ -1,4 +1,4 @@
-# JUST USE FOR REFERENCE THANKS
+# PLEASE JUST USE FOR REFERENCE THANKS
 
 ## Felix Discord Bot
 Simple discord bot for mostly osu related stuff
