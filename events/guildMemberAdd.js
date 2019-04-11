@@ -10,7 +10,7 @@ module.exports = (client, member) => {
         let welcomeMessage = client.database.get(member.guild.id, "welcomeMessage");
         //replace {{user}} with the name
         welcomeMessage = welcomeMessage
-        .replace("{{user}}", member.user.tag);
+        .replace("{{user}}", `<@${member.id}>`);
         
         //look for the welcome channel set in the configurations and then send the welcome message
         member.guild.channels
@@ -20,8 +20,10 @@ module.exports = (client, member) => {
     }
     //if the configuration is turned off
     if(client.database.get(member.guild.id, "roleOnJoin") !== "false") {
+        console.log("asdf");
         //check if the role exists
-        if(!member.guild.roles.find(r => r.name === client.database.get(member.guild.id, "roleOnJoin"))) return;
+        if(!member.guild.roles.find(r => r.name === client.database.get(member.guild.id, "roleOnJoin"))) return console.log("ngg");
+        console.log("asdf");
         //get the role
         let dbJoinRole = member.guild.roles
         .find('name', client.database.get(member.guild.id, "joinRole"));

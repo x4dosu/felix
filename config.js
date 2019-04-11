@@ -18,17 +18,20 @@ module.exports = {
     //Beatconnect Token (You have to apply for it on their discord server)
     beatconnectToken : "",
     //these are the docs for their api i usually cut it out cause i dont know if its private or not
-    beatconnectDocs : "",
-    /*
+    beatconnectDocs : "",    
+	/*
     Your Google token from:
     https://console.developers.google.com/apis/credentials?project=_
     */
     googleToken : "",
 
+
+
+
     //the client's prefix
     prefix : "$",
     //the version
-    version : "3.1.0",
+    version : "3.2.0",
     //my id
     ownerID : "292700741435654155",
     //the id's of some of my friends
@@ -95,8 +98,7 @@ module.exports = {
     //yandere, danbooru and gelbooru api links (for gelbooru im not using the official one cause the official one is xml)
     yandere : "https://yande.re/post.json?tags=order%3Arandom+",
     danbooru : "https://danbooru.donmai.us/posts.json?tags=order%3Arandom+",
-    gelbooru : "https://gelbooru-xsd8bjco8ukx.runkit.sh/posts?tags=",
-
+    gelbooru : "https://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=",
     //youtube's search api
     youtubeSearchApi : "https://www.googleapis.com/youtube/v3/search?part=snippet&q=",
 

@@ -97,8 +97,11 @@ function edate(client, message) {
         client.edateRequest.set(message.author.id, "false", "request");
         client.edateRequest.set(message.author.id, "-", "requester");
         //set the edate date
-        client.edaters.set(message.author.id, exactDate(), "edateDate");
-        client.edaters.set(requester, exactDate(), "edateDate");
+        client.edaters.set(message.author.id, exactDate()[0], "edateDate");
+        client.edaters.set(requester, exactDate()[0], "edateDate");
+        //increase the number of partners
+        client.edaters.inc(message.author.id, "partners");
+        client.edaters.inc(requester, "partners");
     } else {
         //reset the request
         client.edateRequest.set(message.author.id, "false", "request");
@@ -127,7 +130,14 @@ function noESex(client, message) {
 
 function birth(client, message) {
     let kidName = message.content;
+    if(kidName.toLowerCase() === "cancel") {
+        client.birthRequest.set(message.author.id, "-", "gender");
+        client.birthRequest.set(message.author.id, false, "birthRequest");
+        return message.channel.send("Cancelled birth (Yes, you can just cancel birth)");
+    }
     if(kidName.includes("@everyone") || kidName.includes("@here")) return message.channel.send("The name of your kid can't include that");
+    if(kidName.includes("/")) return message.channel.send("You can't use / in your kids name");
+    if(kidName === "kill") return message.channel.send("You can't name your kid that");
     if(client.kids.get(message.author.id, "parent2") === "-") return;
     let parent2 = client.kids.get(message.author.id, "parent2");
     //if you or your partner alredady have that name
@@ -153,11 +163,22 @@ function birth(client, message) {
     let birthdate = exactDate();
     client.kidID.set(nameAuthorID, birthdate[0], "birthdate");
     client.kidID.set(nameParentID, birthdate[0], "birthdate");
-    //save just the birth year for age calc lol
-    client.kidID.set(nameAuthorID, birthdate[1], "birthyear");
-    client.kidID.set(nameParentID, birthdate[1], "birthyear");
-
+    //get the gender from here cause asdf
+    let gender = client.birthRequest.get(message.author.id, "gender");
+    //set a random gender
+    client.kidID.set(nameAuthorID, gender, "gender");
+    client.kidID.set(nameParentID, gender, "gender");
+    //the different races
+    let race = ["African American", "Ginger White", "Mexican Black", "Not black but black enough to say the n-word", "Really Black", "White", "Pale White", "Polish White", "Asian", "osu player", "cookiezi", "Ninja", "Kinda white but actually asian like a boss", "sad & depressed"];
+    //get a random race from the array
+    let randomRace = race[client.functions.getRandomInt(race.length)];
+    //set the random race
+    client.kidID.set(nameAuthorID, randomRace, "race");
+    client.kidID.set(nameParentID, randomRace, "race");
+    //holy shit i have to shorten this code lol
+    
     //set the birth request to false
+    client.birthRequest.set(message.author.id, "-", "gender");
     client.birthRequest.set(message.author.id, false, "birthRequest");
     message.channel.send(`You gave birth to ${kidName} and the other parent is <@${parent2}>`); 
 }

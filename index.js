@@ -28,28 +28,21 @@ Please just use for reference
 
 const Discord = require("discord.js");
 const fs = require("fs");
-
 const Enmap = require("enmap");
-const snekfetch = require("snekfetch");
-const request = require("request");
-const _ = require('lodash');
-const ojs = require("ojsama");
-const http = require("https");
 
 //create the bot / client object
 const client = new Discord.Client();
 
-//import for the config.js file
-const config = require("./config.js");
-
 //make sure the imports are everywhere accesible
-client.config = config;
-client.snekfetch = snekfetch;
-client.request = request;
-client._ = _;
-client.ojs = ojs;
-client.http = http;
+client.snekfetch = require("snekfetch");
+client.request = require("request");
+client._ = require('lodash');
+client.ojs = require("ojsama");
+client.xmlParser = require('xml2json');
+
+client.config = require("./config.js");
 client.functions = require("./commands/functions/otherFunctions.js");
+
 //databases
 client.database = new Enmap({ name: "database" });
 client.commands = new Enmap({ name: "commands" });
@@ -166,4 +159,6 @@ client.privileged = [
 ];
 
 //connect bot with discord servers :flushed:
-client.login(config.token);
+client.login(client.config.token);
+
+//stan talent stan loona

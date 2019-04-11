@@ -2,10 +2,8 @@ module.exports = (client, message) => {
     //imports
     const eDate = require("../commands/functions/eDateFunctions.js");
     const commands = require("../commands/functions/aliases.js");
-    //ignore bots
-    if (message.author.bot) return;
-    //if dm
-    if(message.channel.type === "dm") return message.author.send("I'm only able to respond to messages in guilds!");
+    //i have to do this like this otherwise the bot will try to dm
+    if(message.channel.type === "dm") return;
     //ensure the databases
     client.functions.ensureDatabases(client, message);
 
@@ -15,6 +13,8 @@ module.exports = (client, message) => {
     const p = client.database.get(message.guild.id, "prefix");
     //in case someone forgets their prefix they can do $prefix and it will give the prefix
     if(message.content == `${client.config.prefix}prefix`) message.content = `${p}prefix`;
+    //if the author is a bot
+    if (message.author.bot) return;
     //if message doesn't start with the prefix ignore it
     if (message.content.indexOf(p) !== 0) return;
 
@@ -39,7 +39,7 @@ module.exports = (client, message) => {
     if (!cmd) return;
 
     //logs commands in console (format: LOG: [time] (guild name) COMMAND FROM username#0000: command)
-    console.log(`LOG: [${client.functions.getTime()}] (${message.guild.name}) COMMAND FROM ${message.member.user.tag}: ${message.content}`);
+    console.log(`LOG: [${client.functions.getTime()}] (${message.guild.name}) COMMAND FROM ${message.member.user.tag}: ${message.content.split(p).join(client.config.prefix)}`);
 
     //run the command
     cmd.run(client, message, args, p);

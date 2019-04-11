@@ -251,6 +251,10 @@ exports.get = {
                 let bodyc = r.body;
                 //if the user has no scores on that map
                 if(!bodyc[0]) return message.channel.send("No scores on that map");
+                //sort by pp
+                bodyc = client._.sortBy(bodyc, function(o) {
+                    return o.pp;
+                });//.reverse(); //its weird im unsure wh
                 //request the map
                 client.snekfetch.get(map).then((r) => {
                     let bodym = r.body;
@@ -268,9 +272,14 @@ exports.get = {
                         let acc1 = calc.accCalculation(bodyc, 0).toString().substring(0, 5);
                         let mods1 = calc.modCalculation(client, bodyc, 0);
                         let rawMods1 = bodyc[0].enabled_mods;
+                        //calculate sr
+                        let stars = calc.srCalculation(rawMods1, cBody, client);
                         //calculate if fc pp and pp
                         let ifFCPP1 = calc.ifFCPPCalculation(rawMods1, client, bodyc, 0, bodym, cBody, accn1, calc);
                         let pp1 = parseFloat(bodyc[0].pp);
+                        if(isNaN(pp1)) {
+                            pp1 = parseFloat(calc.ppCalculation(rawMods1, accn1, cBody, bodyc, 0, client));
+                        }
                         //ye i did this in beatconnect.js already just look there for documentation
                         let field1 = {
                             "name": `1. \`${bodyc[0].date}\``,
@@ -299,6 +308,9 @@ exports.get = {
                             let rawMods2 = bodyc[1].enabled_mods;
                             let ifFCPP2 = calc.ifFCPPCalculation(rawMods2, client, bodyc, 1, bodym, cBody, accn2, calc);
                             let pp2 = parseFloat(bodyc[1].pp);
+                            if(isNaN(pp2)) {
+                                pp2 = parseFloat(calc.ppCalculation(rawMods2, accn2, cBody, bodyc, 1, client));
+                            }
                             field2 = {
                                 "name": `2. \`${bodyc[1].date}\``,
                                 "value": `PP: ${pp2.toFixed(2)}pp ${ifFCPP2}\nAccuracy: ${acc2}% ${calc.getHits(bodyc, 1)}\nCombo: ${bodyc[1].maxcombo}x / ${bodym[0].max_combo}x\n${mods2}Grade:  ${rank2}`
@@ -317,6 +329,9 @@ exports.get = {
                             let rawMods3 = bodyc[2].enabled_mods;
                             let ifFCPP3 = calc.ifFCPPCalculation(rawMods3, client, bodyc, 2, bodym, cBody, accn3, calc);
                             let pp3 = parseFloat(bodyc[2].pp);
+                            if(isNaN(pp3)) {
+                                pp3 = parseFloat(calc.ppCalculation(rawMods3, accn3, cBody, bodyc, 2, client));
+                            }
                             field3 = {
                                 "name": `3. \`${bodyc[2].date}\``,
                                 "value": `PP: ${pp3.toFixed(2)}pp ${ifFCPP3}\nAccuracy: ${acc3}% ${calc.getHits(bodyc, 2)}\nCombo: ${bodyc[2].maxcombo}x / ${bodym[0].max_combo}x\n${mods3}Grade:  ${rank3}`
@@ -335,7 +350,7 @@ exports.get = {
                                 "url": mapImg
                             },
                             "author": {
-                                "name": `Top plays from ${bodyp[0].username} on ${bodym[0].artist} - ${bodym[0].title} [${bodym[0].version}]`,
+                                "name": `Top plays from ${bodyp[0].username} on ${bodym[0].artist} - ${bodym[0].title} [${bodym[0].version}] (${stars} ⃰ )`,
                                 "url": `https://osu.ppy.sh/users/${bodyp[0].user_id}`,
                                 "icon_url": avi
                             },
@@ -351,9 +366,10 @@ exports.get = {
 
 exports.send = {
     help : function (message, server, p) {
+        let serverName = server[0].toUpperCase() + server.slice(1);
         //send message in channel
         message.channel.send({"embed": {
-            "description": "**" + server + ":** \n\nprofile (p) <name>: ``sends a " + server + " profile card``\nlast (l) <name>: ``sends recent plays of entered user``\ntop (t) <name>: ``sends top plays of entered user``\n\nusage: " + p + "osu " + server +" <command>",
+            "description": "**" + serverName + ":** \n\nprofile (p) <name>: ``sends a " + server + " profile card``\nlast (l) <name>: ``sends recent plays of entered user``\ntop (t) <name>: ``sends top plays of entered user``\n\nusage: " + p + "osu " + server +" <command>",
             "color": 16399236
         }});
     }

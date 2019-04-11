@@ -28,3 +28,12 @@
             1. fix [ws] [connection] Server closed the WebSocket connection: 1000
             2. improve my github wiki with a lot of documentation
 			3. add error messages to config
+            4. add more kid properties
+            5. make kpop list command
+            6. make adoption stuff
+            7. make leaderboards for esex counter
+            8. fix uptime
+
+            (youtube.js):
+
+            1. make the embed look like the normal youtube embed lol

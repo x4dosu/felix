@@ -3,7 +3,7 @@ module.exports = (client) => {
     console.log(`${client.user.username} started using version ${client.config.version}`);
 
     //changes the game that is displayed in discord activity
-    client.user.setActivity(`felix cry | ${client.config.prefix}help`, { type: 'WATCHING' });
+    client.user.setActivity(`LOOΠΔ | ${client.config.prefix}help`, { type: 'LISTENING' });
     //changes the presence
     client.user.setPresence({status:'online'});
 

@@ -13,18 +13,25 @@ echo IMPORTANT: RUN THIS AS AN ADMIN!
 echo if you followed the steps and you still get a error message me on discord: Felix#9385
 :: show the current directory
 cd
-:: download all the node modules needed for the bot
+:: download discord.js as base for the client
 call npm i discord.js
+:: download file system for the command handler
 call npm i fs
+:: download snekfetch for simple json requests
 call npm i snekfetch
+:: download request for more complicated requests
 call npm i request
+:: download lodash for sorting the requested jsons
 call npm i lodash
-call npm i https
+:: download xml2json to parse xml to json
+call npm i xml2json
+:: download ojsama for osu pp and star rating calculation
 call npm i ojsama
 :: this is needed for better-sqlite-pool
 call npm i -g --add-python-to-path --vs2015 --production windows-build-tools
 :: this is needed for enmap
 call npm i better-sqlite-pool
+:: download enmap for databases
 call npm i enmap
 :: send info messages and then pause
 echo finished installing.

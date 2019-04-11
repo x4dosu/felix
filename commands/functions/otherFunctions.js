@@ -69,12 +69,12 @@ module.exports = {
         client.lastMap.ensure(message.guild.id, {lastMap: "-"});
         client.osuNames.ensure(message.author.id, client.osuConfig);
         client.specialNSFW.ensure(message.author.id, {nsfw: false});
-        client.edaters.ensure(message.author.id, {partner: "-", edateDate: "-"});
+        client.edaters.ensure(message.author.id, {partner: "-", edateDate: "-", partners: 0});
         client.edateRequest.ensure(message.author.id, {request: "false", requester: "-"});
         client.sex.ensure(message.author.id, {virginity: true, pregnancy: false, consent: false, counter: 0});
         client.sexRequest.ensure(message.author.id, {eSexRequest: false, eSexRequester: "-"});
         client.kids.ensure(message.author.id, {pregnancy: false, parent1: message.author.id, parent2: "-", kids: []});
-        client.birthRequest.ensure(message.author.id, {test: false, birthRequest: false});
+        client.birthRequest.ensure(message.author.id, {test: false, birthRequest: false, gender: "-"});
     },
     getPrivilege : (message, client) => {
         if(client.privileged.includes(message.author.id)) return true;

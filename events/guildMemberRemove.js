@@ -9,7 +9,7 @@ module.exports = (client, member) => {
     let farewellMessage = client.database.get(member.guild.id, "farewellMessage");
     //replace {{user}} with the name
     farewellMessage = farewellMessage
-    .replace("{{user}}", member.user.tag);
+    .replace("{{user}}", `<@${member.id}>`);
     
     //look for the farewell channel and then send the farewell message
     member.guild.channels

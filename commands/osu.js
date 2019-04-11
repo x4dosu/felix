@@ -189,7 +189,7 @@ exports.run = (client, message, args, p) => {
                     return;
                 }
             }
-            osu.send.help(message, "Kawata", p);
+            osu.send.help(message, "kawata", p);
             return;
         } else
         /*below are the gatari things before i get into them i wanted to say
