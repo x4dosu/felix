@@ -192,14 +192,12 @@ exports.run = (client, message, args, p) => {
             osu.send.help(message, "kawata", p);
             return;
         } else
-        /*below are the gatari things before i get into them i wanted to say
-        a big thanks to sarah otherwise i wouldve never included gatari cause
-        of their shit api and cause the admins didn't know shit about their
-        api probably the developer wouldve known about it but luckily sarah
-        helped me out the api isn't like the api of all other servers
-        and it took me a lot of hours to do this so yea im sorry that the
-        gatari commands don't include everything like pp calculation & sr for
-        the top command but i really am sick of their shit btw pls give me gatari key
+        /*firenigger is a retarded motherfucker holy shit please play gatari yes legendre legit
+        everyone else is cheating tho yes nigger moment of century thanks sarah for helping
+        and being the only person that could help me (actual admins didnt even know their shit)
+        stupid niggers i hate gatari fuck you nigger ok i mean honestly though i guess only 
+        rumoi, the dev of gatari & some other insiders really know shit about the api but still
+        the admins should know a little more yes and please ban firenigger yeet
         */
         if(firstArgs === 'gatari' || firstArgs === 'g') {
             if(args[1]) {
@@ -239,7 +237,7 @@ exports.run = (client, message, args, p) => {
 
                         //request the new profile api json thing im gay
                         client.request(profile, {json:true}, (err, res, body) => {
-                            if(!body.stats.playcount) return message.channel.send(`${bodyname} is probably restricted on Gatari`);
+                            if(!body.stats.country_rank) return message.channel.send(`${bodyname} is probably restricted on Gatari`);
                             let bodycrank = body.stats.country_rank;
                             let bodyplaycount = body.stats.playcount;
                             //send the profile embed
@@ -465,7 +463,7 @@ exports.run = (client, message, args, p) => {
                                     }
                                     let stars1 = rawStars.total.toFixed(2);
                                     //request the file of the second map
-                                    client.request('http://osu.ppy.sh/osu/' + bodyt.scores[0].beatmap.beatmap_id, (error, response, body2) => {
+                                    client.request('http://osu.ppy.sh/osu/' + bodyt.scores[1].beatmap.beatmap_id, (error, response, body2) => {
                                         //calculate if fc pp and star rating
                                         //shoot the request body in the ojsama parser
                                         let parser = new client.ojs.parser().feed(body2);
@@ -495,7 +493,7 @@ exports.run = (client, message, args, p) => {
                                         }
                                         let stars2 = rawStars.total.toFixed(2);
                                         //request the file of the third map
-                                        client.request('http://osu.ppy.sh/osu/' + bodyt.scores[0].beatmap.beatmap_id, (error, response, body3) => {
+                                        client.request('http://osu.ppy.sh/osu/' + bodyt.scores[2].beatmap.beatmap_id, (error, response, body3) => {
                                             //calculate if fc pp and star rating
                                             //shoot the request body in the ojsama parser
                                             let parser = new client.ojs.parser().feed(body3);

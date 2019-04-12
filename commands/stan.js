@@ -6,7 +6,28 @@ exports.run = (client, message, args, p) => {
         message.channel.send("STOP TRYING TO PING EVERYONE AND STAN LOONA INSTEAD :gift_heart:");
     } else
     if(arg === "loona") {
-        message.channel.send("STAN LOONA :pray: :nail_care:");
+        //array of all loona girls
+        let loona = ["heejin", "hyunjin+loona", "jinsoul", "haseul", "chuu", "yeojin", "olivia+hye", "choerry", "go+won", "vivi+loona", "kim+lip", "yves+loona"];
+        //get a random girl from the array
+        loona = loona[client.functions.getRandomInt(loona.length)];
+        //put the url together and replace the key with the key and the query with the random girl
+        let url = client.config.tenorSearchApi.replace("{query}", loona).replace("{key}", client.config.tenorToken);
+        //request the url
+        client.snekfetch.get(url).then((r) => {
+            let body = r.body;
+            //if no result return just in case tho that should never happen
+            if(!body.results[0]) return;
+            //send the message
+            message.channel.send({
+                "embed": {
+                    "description": `**STAN LOONA :pray: :heart_eyes: (${loona.split(/loona|[+]/).join(" ").toUpperCase()})**`,
+                    "color": 16399236,
+                    "image": {
+                        "url": body.results[client.functions.getRandomInt(body.results.length)].media[0].gif.url
+                    }
+                }
+            });
+        });
     } else 
     if(arg === "josh") {
         message.channel.send("okay fair point josh is more epic than loona (stan loona)");

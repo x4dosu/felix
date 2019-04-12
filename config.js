@@ -18,20 +18,24 @@ module.exports = {
     //Beatconnect Token (You have to apply for it on their discord server)
     beatconnectToken : "",
     //these are the docs for their api i usually cut it out cause i dont know if its private or not
-    beatconnectDocs : "",    
-	/*
+    beatconnectDocs : "",
+    /*
     Your Google token from:
     https://console.developers.google.com/apis/credentials?project=_
     */
     googleToken : "",
-
+    /*
+    Your Tenor token from:
+    https://tenor.com/developer/dashboard
+    */
+    tenorToken : "",
 
 
 
     //the client's prefix
     prefix : "$",
     //the version
-    version : "3.2.0",
+    version : "3.2.1",
     //my id
     ownerID : "292700741435654155",
     //the id's of some of my friends
@@ -101,6 +105,8 @@ module.exports = {
     gelbooru : "https://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=",
     //youtube's search api
     youtubeSearchApi : "https://www.googleapis.com/youtube/v3/search?part=snippet&q=",
+    //tenor search api
+    tenorSearchApi : "https://api.tenor.com/v1/search?limit=5&q={query}&key={key}",
 
     //no mod if i ever want to change it
     noMod : "",

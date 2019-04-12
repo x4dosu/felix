@@ -1,4 +1,4 @@
-# PLEASE JUST USE FOR REFERENCE THANKS!
+# JUST USE FOR REFERENCE THANKS
 
 ## Felix Discord Bot
 Simple discord bot for mostly osu related stuff
@@ -14,7 +14,7 @@ Simple discord bot for mostly osu related stuff
 
 ### With run.bat:
 
-Just open run.bat
+Just open run.bat lol
 
 ### With command prompt:
 
