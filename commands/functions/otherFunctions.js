@@ -2,6 +2,13 @@ module.exports = {
     username : (client, message, args, nameIndex, server) => {
         let username;
         //if there is a username entered in the nameIndex position
+        if(message.mentions.users.first()) {
+            client.osuNames.ensure(message.mentions.users.first().id, client.osuConfig);
+            username = client.osuNames.get(message.mentions.users.first().id, server);
+            if(username === "-") {
+                username = `<@${message.mentions.users.first().id}> hasn't set their username yet! (\`${client.p}osu set <server> <name>\`)`
+            }
+        } else
         if(args[nameIndex]) {
             //slice everything before the name and join the args with a space
             username = args.slice(nameIndex).join(" ");
@@ -9,13 +16,6 @@ module.exports = {
             //get the default username from the database
             username = client.osuNames.get(message.author.id, server);
         }
-        //if the author hasn't changed their username return
-        if(username === '-') return message.channel.send("Please enter a user");
-        //if the name includes @everyone or @here return
-        if(username.includes("@everyone")) return message.channel.send("Please don't try to abuse the command by pinging everyone");
-        if(username.includes("@here")) return message.channel.send("Please don't try to abuse the command by pinging everyone");
-        //if someone tries to get a different mode than standard return cause I haven't added pp & sr calculation for that
-        if(username.includes("&m=")) return message.channel.send("I'm sorry but the bot doesn't support any other modes than standard");
         return username;
     },
     /*get the nearest number with the power of 2 next to the mods number
@@ -78,6 +78,11 @@ module.exports = {
     },
     getPrivilege : (message, client) => {
         if(client.privileged.includes(message.author.id)) return true;
+    },
+    arrayRemove : (array, value) => {
+        return array.filter(function(ele){
+            return ele != value;
+        });
     }
 }
 

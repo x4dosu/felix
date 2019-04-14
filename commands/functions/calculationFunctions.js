@@ -6,10 +6,10 @@ module.exports = {
     },
     rankToEmoji : (body, bodyIndex, client) => {
         let rank;
-        if(body[bodyIndex].rank === 'X') {
+        if(body[bodyIndex].rank === 'X' || body[bodyIndex].rank === 'SS') {
             rank = client.config.osuX;
         } else
-        if(body[bodyIndex].rank === 'XH') {
+        if(body[bodyIndex].rank === 'XH' || body[bodyIndex].rank === 'SSH') {
             rank = client.config.osuXH;
         }
         if(body[bodyIndex].rank === 'S') {
@@ -43,11 +43,26 @@ module.exports = {
         let acc = ((acc300s * 300 + acc100s * 100 + acc50s * 50 + accmiss * 0)/((acc300s + acc100s + acc50s + accmiss) * 300) * 100);
         return acc;
     }, 
+    specialAccCalculation : (c300, c100, c50, cMiss) => {
+        let acc300s = parseFloat(c300);
+        let acc100s = parseFloat(c100);
+        let acc50s = parseFloat(c50);
+        let accmiss = parseFloat(cMiss);
+        let acc = ((acc300s * 300 + acc100s * 100 + acc50s * 50 + accmiss * 0)/((acc300s + acc100s + acc50s + accmiss) * 300) * 100);
+        return acc;
+    }, 
     modCalculation : (client, body, bodyIndex) => {
         let rawMods = body[bodyIndex].enabled_mods;
         let mods = client.config.noMod;
         if(rawMods > 0) {
           mods = functions.nearestPow2(rawMods);
+        }
+        return mods;
+    }, 
+    specialModCalculation : (client, enabledMods) => {
+        let mods = client.config.noMod;
+        if(enabledMods > 0) {
+          mods = functions.nearestPow2(enabledMods);
         }
         return mods;
     }, 
@@ -124,11 +139,57 @@ module.exports = {
         //return the if fc pp
         return ifFCPP;
     },
+    specialIfFCPPCalculation : (mods, client, requestBody, accn, fcCombo, combo, calc, c300, c100, c50, cMiss) => {
+        //shoot the request body in the ojsama parser
+        let parser = new client.ojs.parser().feed(requestBody);
+        //get the map
+        let map = parser.map;
+        //calc acc
+        c50 = c50 + cMiss;
+        cMiss = 0;
+        accn = calc.specialAccCalculation(c300, c100, c50, cMiss);
+        //calculate the raw stars
+        let rawStars = new client.ojs.diff().calc({map: map, mods: mods});
+        let ifFCPP = "";
+        //if the combo combo of the play isn't the same as fc combo
+        if(fcCombo != combo) {
+            //max combo of the map
+            let comboFC = parseInt(fcCombo);
+            //no misses
+            let nmissFC = parseInt(0);
+            //get the accuracy
+            let acc_percent = parseFloat(accn);
+            //calculate if fc pp
+            fcPP = client.ojs.ppv2({
+                stars: rawStars,
+                combo: comboFC,
+                nmiss: nmissFC,
+                acc_percent: acc_percent,
+            });
+            //change the variable
+            ifFCPP = `=> ${fcPP.total.toFixed(2)}pp (with ${accn.toFixed(2)}%)`;
+        }
+        //return the if fc pp
+        return ifFCPP;
+    },
     mapCompletion : (body, requestBody, client) => {
         let parser = new client.ojs.parser().feed(requestBody);
         let map = parser.map;
         let totalObjects = map.nspinners + map.nsliders + map.ncircles;
         let hittedObjects = parseInt(body[0].count300) + parseInt(body[0].count100) + parseInt(body[0].count50) + parseInt(body[0].countmiss);
+        let mapCompletion = hittedObjects * 100 / totalObjects;
+        if(mapCompletion != 100) {
+            mapCompletion = `\nMap Completion: ${mapCompletion.toFixed(2)}%`;
+        } else {
+            mapCompletion = "";
+        }
+        return mapCompletion;
+    },
+    specialMapCompletion : (client, requestBody, c300, c100, c50, cMiss) => {
+        let parser = new client.ojs.parser().feed(requestBody);
+        let map = parser.map;
+        let totalObjects = map.nspinners + map.nsliders + map.ncircles;
+        let hittedObjects = parseInt(c300) + parseInt(c100) + parseInt(c50) + parseInt(cMiss);
         let mapCompletion = hittedObjects * 100 / totalObjects;
         if(mapCompletion != 100) {
             mapCompletion = `\nMap Completion: ${mapCompletion.toFixed(2)}%`;

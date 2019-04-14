@@ -13,7 +13,7 @@ module.exports = (client, member) => {
     
     //look for the farewell channel and then send the farewell message
     member.guild.channels
-    .find("name", client.database.get(member.guild.id, "farewellChannel"))
+    .find(n => n.name === client.database.get(member.guild.id, "farewellChannel"))
     .send(farewellMessage)
     .catch(console.error);
 }

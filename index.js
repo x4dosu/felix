@@ -39,7 +39,7 @@ client.request = require("request");
 client._ = require('lodash');
 client.ojs = require("ojsama");
 client.xmlParser = require('xml2json');
-
+//client.fetch = require('node-fetch');
 client.config = require("./config.js");
 client.functions = require("./commands/functions/otherFunctions.js");
 
@@ -56,35 +56,6 @@ client.sexRequest = new Enmap({ name: "sexRequest" });
 client.kids = new Enmap({ name: "kids" });
 client.kidID = new Enmap({ name: "kidsNameID" });
 client.birthRequest = new Enmap({ name: "birthRequest" });
-
-/*
-* this is just to make a new line after clearing the command prompt and running the bot with
-* DOSKEY bot=cd your-bot-dir $T cls $T node index.js
-*/
-
-console.log("->");
-
-/* so that is looks like this
-
-your-bot-dir>->
-The configurations for 8 servers have been loaded
-33 commands have been loaded
-The osu names of 78 users have been loaded
-Felix 🦋 started using version 3.0.3
-
-
-instead of
-
-your-bot-dir>The configurations for 8 servers have been loaded
-33 commands have been loaded
-The osu names of 78 users have been loaded
-Felix 🦋 started using version 3.0.3
-*/
-
-//load databases & log it
-client.database.defer.then( () => {console.log(`The configurations for ${client.database.size} servers have been loaded`);});
-client.commands.defer.then( () => {console.log(`A total of ${client.commands.size} commands have been loaded`);});
-client.osuNames.defer.then( () => {console.log(`The osu names of ${client.osuNames.size} users have been loaded`);});
 
 //ERROR AND WARN HAVE TO BE THERE OTHERWISE BOT CAN CRASH WITHOUT ANY ERROR MESSAGE OR ANYTHING!
 client.on("error", console.error);
@@ -127,11 +98,11 @@ fs.readdir("./commands/", (err, files) => {
 client.defaultSettings = {
   welcome: "false",
   welcomeChannel: "general",	
-  welcomeMessage: "{{user}} joined the server <:yeojin:513456071155646556>",
+  welcomeMessage: "{{user}} joined the server",
 
   farewell: "false",
   farewellChannel: "general",
-  farewellMessage: "{{user}} left the server <:owocry:482982931158138880>",
+  farewellMessage: "{{user}} left the server",
 
   roleOnJoin: "false",
   joinRole: "Member",

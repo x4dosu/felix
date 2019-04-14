@@ -35,7 +35,7 @@ module.exports = {
     //the client's prefix
     prefix : "$",
     //the version
-    version : "3.2.1",
+    version : "3.3.1",
     //my id
     ownerID : "292700741435654155",
     //the id's of some of my friends
@@ -68,6 +68,10 @@ module.exports = {
     akatsukiRecentApi : "https://akatsuki.pw/api/get_user_recent?u=",
     akatsukiAviUrl : "https://a.akatsuki.pw/",
     akatsukiPUrl : "https://akatsuki.pw/u/",
+    
+    akatsukiRxProfileApi : "https://akatsuki.pw/api/v1/users/rxfull?name=",
+    akatsukiRxTopApi : "https://akatsuki.pw/api/v1/users/scores/best?rx=1&name=",
+    akatsukiRxRecentApi : "https://akatsuki.pw/api/v1/users/scores/recent?rx=1&name=",
 
     rippleProfileApi : "https://ripple.moe/api/get_user?u=",
     rippleTopApi : "https://ripple.moe/api/get_user_best?u=",

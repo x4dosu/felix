@@ -9,7 +9,7 @@ exports.run = (client, message, args, p) => {
     if(!client.guilds.find(g => g.name === invg)) return message.channel.send(`I couldn't find the guild \`\`${invg}\`\``);
     let invgl = client.guilds.find(g => g.name === invg);
     //if the client doesn't have permissions to create an instant invite return
-    if(!invgl.me.hasPermissions("CREATE_INSTANT_INVITE")) return message.channel.send(`I don't have the permission to create an invite on \`\`${invg}\`\``);
+    if(!invgl.me.hasPermission("CREATE_INSTANT_INVITE")) return message.channel.send(`I don't have the permission to create an invite on \`\`${invg}\`\``);
 
     //look for the first text channel
     let channelID;

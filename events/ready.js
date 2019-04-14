@@ -1,11 +1,38 @@
 module.exports = (client) => {
-    //log the version
-    console.log(`${client.user.username} started using version ${client.config.version}`);
+    /*
+    * this is just to make a new line after clearing the command prompt and running the bot with
+    * DOSKEY bot=cd your-bot-dir $T cls $T node index.js
+    */
 
-    //changes the game that is displayed in discord activity
-    client.user.setActivity(`LOOΠΔ | ${client.config.prefix}help`, { type: 'LISTENING' });
+    console.log("->");
+
+    /* so that is looks like this
+
+    your-bot-dir>->
+    The configurations for 8 servers have been loaded
+    33 commands have been loaded
+    The osu names of 78 users have been loaded
+    Felix 🦋 started using version 3.0.3
+
+
+    instead of
+
+    your-bot-dir>The configurations for 8 servers have been loaded
+    33 commands have been loaded
+    The osu names of 78 users have been loaded
+    Felix 🦋 started using version 3.0.3
+    */
+
+    //load databases & log it
+    client.database.defer.then( () => {console.log(`The configurations for ${client.database.size} servers have been loaded`);});
+    client.commands.defer.then( () => {console.log(`A total of ${client.commands.size} commands have been loaded`);});
+    client.osuNames.defer.then( () => {console.log(`The osu names of ${client.osuNames.size} users have been loaded`);});
+
+    //log the version
+    console.log(`${client.user.username} started using version ${client.config.version} and is in ${client.guilds.size} different guilds`);
+
     //changes the presence
-    client.user.setPresence({status:'online'});
+    client.user.setPresence({ activity: { name: `LOOΠΔ | ${client.config.prefix}help`, type: 'LISTENING' } }, { status:'online' });
 
     //reset all requests & requesters when starting to prevent buggy behaviour
     client.sexRequest.deleteAll();

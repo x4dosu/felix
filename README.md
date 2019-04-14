@@ -23,3 +23,7 @@ type node index.js
 ## Stopping the bot:
 
 ctrl+c on Windows
+
+## Changelog:
+
+For changelog go to https://github.com/felix-bot/changelog

@@ -2,7 +2,7 @@ module.exports = (client, message) => {
     //imports
     const eDate = require("../commands/functions/eDateFunctions.js");
     const commands = require("../commands/functions/aliases.js");
-    //i have to do this like this otherwise the bot will try to dm
+    //if the message comes from dms
     if(message.channel.type === "dm") return;
     //ensure the databases
     client.functions.ensureDatabases(client, message);
@@ -11,6 +11,7 @@ module.exports = (client, message) => {
     eDate.eDateStuff(client, message);
     
     const p = client.database.get(message.guild.id, "prefix");
+    client.p = p;
     //in case someone forgets their prefix they can do $prefix and it will give the prefix
     if(message.content == `${client.config.prefix}prefix`) message.content = `${p}prefix`;
     //if the author is a bot
@@ -25,6 +26,7 @@ module.exports = (client, message) => {
 
     //aliases
     let alias = commands.aliases(command, args);
+    //for the osu aliases
     if(alias) {
       command = alias[0];
       args.unshift(alias[1]);

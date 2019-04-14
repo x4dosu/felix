@@ -20,6 +20,9 @@ exports.run = (client, message, args, p) => {
         //the private server commands are all the same and easy to understand so yea just read through them i wont document them
         if(firstArgs === "akatsuki" || firstArgs === "a") {
             let pApi = cfg.akatsukiProfileApi;
+            let rxPApi = cfg.akatsukiRxProfileApi;
+            let rxTApi = cfg.akatsukiRxTopApi;
+            let rxRApi = cfg.akatsukiRxRecentApi;
             let tApi = cfg.akatsukiTopApi;
             let rApi = cfg.akatsukiRecentApi;
             let pUrl = cfg.akatsukiPUrl;
@@ -30,16 +33,27 @@ exports.run = (client, message, args, p) => {
         
             if(args[argIndex]) {
                 let secondArgs = args[argIndex];
-        
                 if(secondArgs === "profile" || secondArgs === "p") {
+                    if(args.includes("-rx")) {
+                        osu.get.rxProfile(rxPApi, aviUrl, pUrl, args, message, client, nameIndex, server);
+                        return;
+                    }
                     osu.get.profile(pApi, aviUrl, pUrl, args, message, client, nameIndex, server);
                     return;
                 } else
                 if(secondArgs === "top" || secondArgs === "t") {
+                    if(args.includes("-rx")) {
+                        osu.get.rxTop(rxPApi, rxTApi, pUrl, client, message, args, nameIndex, server)
+                        return;
+                    }
                     osu.get.top(pApi, tApi, pUrl, client, message, args, nameIndex, server);
                     return;
                 } else
                 if(secondArgs === "last" || secondArgs === "l" || secondArgs === "r" || secondArgs === "recent") {
+                    if(args.includes("-rx")) {
+                        osu.get.rxLast(client, message, args, nameIndex, rxRApi, rxPApi, server, aviUrl);
+                        return;
+                    }
                     osu.get.last(client, message, args, nameIndex, rApi, pApi, server, aviUrl);
                     return;
                 }
@@ -597,6 +611,15 @@ exports.run = (client, message, args, p) => {
         //todo rewrite maps
         if(firstArgs === "maps" || firstArgs === "m") {
             let username = client.functions.username(client, message, args, 1, "bancho");
+            if(username.startsWith("<@")) return message.channel.send(username);
+            //if the author hasn't changed their username return
+            if(username == '-') return message.channel.send("Please enter a user");
+            //if the name includes @everyone or @here return
+            if(username.includes("@everyone")) return message.channel.send("Please don't try to abuse the command by pinging everyone");
+            if(username.includes("@here")) return message.channel.send("Please don't try to abuse the command by pinging everyone");
+            //if someone tries to get a different mode than standard return cause I haven't added pp & sr calculation for that
+            if(username.includes("&m=")) return message.channel.send("I'm sorry but the bot doesn't support any other modes than standard");
+
             let profile = cfg.banchoProfileApi + username;
             let maps = cfg.banchoUserMapApi + username;
 

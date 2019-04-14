@@ -1,7 +1,6 @@
 module.exports = (client, member) => {
     //make sure the guild is in the database already
     client.database.ensure(member.guild.id, client.defaultSettings);
-
     //if the configuration is turned off 
     if(client.database.get(member.guild.id, "welcome") !== "false") {
         //check if the welcome channel set in the configurations exists
@@ -14,22 +13,19 @@ module.exports = (client, member) => {
         
         //look for the welcome channel set in the configurations and then send the welcome message
         member.guild.channels
-        .find("name", client.database.get(member.guild.id, "welcomeChannel"))
+        .find(n => n.name === client.database.get(member.guild.id, "welcomeChannel"))
         .send(welcomeMessage)
         .catch(console.error);
     }
     //if the configuration is turned off
     if(client.database.get(member.guild.id, "roleOnJoin") !== "false") {
-        console.log("asdf");
         //check if the role exists
-        if(!member.guild.roles.find(r => r.name === client.database.get(member.guild.id, "roleOnJoin"))) return console.log("ngg");
-        console.log("asdf");
+        if(!member.guild.roles.find(r => r.name === client.database.get(member.guild.id, "joinRole"))) return;
         //get the role
         let dbJoinRole = member.guild.roles
-        .find('name', client.database.get(member.guild.id, "joinRole"));
+        .find(r => r.name === client.database.get(member.guild.id, "joinRole"));
         //add the role
-        member
-        .addRole(dbJoinRole)
+        member.roles.add(dbJoinRole)
         .catch(console.error);
     }
 }

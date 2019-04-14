@@ -1,20 +1,21 @@
 @echo off
 :: get the directory of the bat file
- @setlocal enableextensions
+@setlocal enableextensions
 :: set the directory to the folder before /lib
- @cd /d "%~dp0"
+@cd /d "%~dp0"
 :: send some information
-echo Before running the installer make sure you have
-echo Visual Studio: https://code.visualstudio.com/
-echo NodeJS: https://nodejs.org/en/
-echo after installing nodejs you have to restart your pc to install it in path
-echo this might take a while so be patient
-echo IMPORTANT: RUN THIS AS AN ADMIN!
-echo if you followed the steps and you still get a error message me on discord: Felix#9385
-:: show the current directory
-cd
-:: download discord.js as base for the client
-call npm i discord.js
+echo Checklist before running this:
+echo 1. Install NodeJS: https://nodejs.org/en/
+echo 2. Restart your PC to install it in path
+echo 3. Run "modules installer.bat" as an admin
+echo if you followed the steps and you still get an error, message me on discord: Felix#9385
+echo Press any button to start the installation
+:: Pause
+PAUSE >nul
+:: after unpause clear the chat
+cls
+:: download discord.js as base for the client (master branch cause stable is fucked)
+call npm i discordjs/discord.js
 :: download file system for the command handler
 call npm i fs
 :: download snekfetch for simple json requests
@@ -33,7 +34,11 @@ call npm i -g --add-python-to-path --vs2015 --production windows-build-tools
 call npm i better-sqlite-pool
 :: download enmap for databases
 call npm i enmap
+:: little timeout to read what happened
+timeout 5 >nul
+:: clear the chat if you want info how the installer went remove this
+cls
 :: send info messages and then pause
-echo finished installing.
-echo press any key to close the installer
+echo Finished installing the modules.
+echo Press any key to close the installer
 PAUSE >nul

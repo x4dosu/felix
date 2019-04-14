@@ -5,9 +5,13 @@ exports.run = (client, message, args, p) => {
     if(arg.includes("@everyone") || arg.includes("@here")) {
         message.channel.send("STOP TRYING TO PING EVERYONE AND STAN LOONA INSTEAD :gift_heart:");
     } else
+    if(/[^a-zA-Z0-9]/.test(arg)) {
+        message.content = p + "stan loona";
+        client.emit("message", message);
+    } else
     if(arg === "loona") {
         //array of all loona girls
-        let loona = ["heejin", "hyunjin+loona", "jinsoul", "haseul", "chuu", "yeojin", "olivia+hye", "choerry", "go+won", "vivi+loona", "kim+lip", "yves+loona"];
+        let loona = ["heejin", "hyunjin+loona", "jinsoul", "haseul", "chuu", "yeojin", "olivia+hye", "choerry", "go+won", "vivi+loona", "kimlip+loona", "yves+loona"];
         //get a random girl from the array
         loona = loona[client.functions.getRandomInt(loona.length)];
         //put the url together and replace the key with the key and the query with the random girl

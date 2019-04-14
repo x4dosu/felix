@@ -1,0 +1,15 @@
+{
+    "name": "felix",
+    "version": "3.0.0",
+    "description": "A multi-purpose discord bot",
+    "main": "index.js",
+    "scripts": {
+        "run": "node index.js"
+    },
+    "author": "Felix Caldeira (felixjcaldeira@gmail.com)",
+    "license": "LGPL-2.1",
+    "dependencies": {
+        "discord.js": "github:discordjs/discord.js",
+        "node-fetch": "^2.3.0"
+    }
+}

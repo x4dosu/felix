@@ -18,18 +18,43 @@
             ^-//maybe even rewrite full command and make it more similar to the beatconnect cmd
             ^^--////maybe even make it use the beatconnect api :thinking: the uniqueIDs are just lowkey yikes
             5. change the format of the date from year:month:day hours:minutes:seconds to days Days, hours Hours and minutes Minutes or soemthing
-
+            6. fix compare sort by pp 
+            7. compare: put star rating for every after the date like this: `date` (sr*)
             (commands/config.js):
+            8. add beatconnect link to $maps
+            9. make alias for $maps
+            10. document changes
 
             1. add more configurations to commands/config.js (maybe add user configurations)
 
             (general things):
 
-            1. fix [ws] [connection] Server closed the WebSocket connection: 1000
-            2. improve my github wiki with a lot of documentation
-			3. add error messages to config
-            4. add more kid properties
-            5. make kpop list command
-            6. make adoption stuff
-            7. make leaderboards for esex counter
-            8. fix uptime
+            1. improve my github wiki with a lot of documentation
+			2 add error messages to config
+            3. add more kid properties
+            4. make kpop list command
+            5. make adoption stuff
+            6. make leaderboards for esex counter
+            7. fix uptime
+            8. add badges to family command
+            9. fix role on join
+
+            IMPORTANT: 
+            REWRITE ALL REQUESTING COMMANDS LIKE THIS:
+
+            exports.run = async (client, message, args, p) => {
+                const response = await client.snekfetch.get(client.config.danbooru);
+                const json = await response.body;
+                console.log(json);
+            }
+
+            LIST OF ALL COMMANDS I HAVE TO REWRITE:
+            everything in:
+                ./commands/functions
+            danbooru.js
+            gelbooru.js
+            osu.js LOL
+            yandere.js
+            youtube.js
+
+            I WANT TO DIEEEE

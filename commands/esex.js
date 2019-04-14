@@ -20,7 +20,8 @@ exports.run = (client, message, args, p) => {
     } else 
     if(!message.mentions.users.first() || pinged === partner) {
         let sexer = client.users.get(partner);
-        if(client.kids.get(partner, "pregnancy")) return message.channel.send(`Your partner is currently pregnant, tell him to either abort or give birth to their kid with \`${p}eabort\` or \`${p}ebirth\``);
+        if(!message.guild.members.get(sexer.id)) return message.channel.send(`Your partner isn't in this guild`);
+        if(client.kids.get(partner, "pregnancy")) return message.channel.send(`Your partner is currently pregnant, tell them to either abort or give birth to their kid with \`${p}eabort\` or \`${p}ebirth\``);
         if(client.kids.get(userID, "pregnancy")) return message.channel.send(`You're currently pregnant. You can either \`${p}eabort\` or \`${p}ebirth\``);
         if(client.sexRequest.get(partner, "eSexRequest")) return message.channel.send("You already have an esex request open!");
         if(client.sexRequest.get(userID, "eSexRequest")) return message.channel.send("You still have to answer to an esex request!");
